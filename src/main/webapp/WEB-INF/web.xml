@@ -1,0 +1,64 @@
+<web-app version="3.0">
+
+  <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+    <servlet-name>GetStartPageServlet</servlet-name>
+    <servlet-class>ua.polischuk.controller.Servlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetStartPageServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+ <!-- <filter>
+    <filter-name>langFilter</filter-name>
+    <filter-class>ua.polischuk.filter.LanguageFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>langFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+-->
+
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>ua.polischuk.filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
+  <filter>
+    <filter-name>CacheFilter</filter-name>
+    <filter-class>ua.polischuk.filter.NoCacheFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CacheFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ua.polischuk.filter.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <listener>
+    <listener-class>
+      ua.polischuk.listener.SessionListener
+    </listener-class>
+  </listener>
+
+  <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/WEB-INF/error.jsp</location>
+  </error-page>
+
+</web-app>
