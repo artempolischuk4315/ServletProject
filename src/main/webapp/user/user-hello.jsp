@@ -10,7 +10,7 @@
 
 <html>
 <head>
-    <title>USER</title>
+
 
 </head>
 <body>
@@ -21,5 +21,22 @@
     <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
     <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 </ul>
+<form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
+    <input name="category" value="MATH" hidden >
+    <input class="button" type="submit" value=<fmt:message key="label.category.math" />>
+</form>
+<form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
+    <input name="category" value="PROGRAMMING" hidden >
+    <input class="button" type="submit" value=<fmt:message key="label.category.progr"/> >
+</form>
+<form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
+    <input name="category" value="HISTORY" hidden >
+    <input class="button" type="submit" value=<fmt:message key="label.category.history" />>
+</form>
+<form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
+    <input name="category" value="PHYSICS" hidden >
+    <input class="button" type="submit" value=<fmt:message key="label.category.physics" />>
+</form>
+
 </body>
 </html>

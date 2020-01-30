@@ -2,11 +2,9 @@ package ua.polischuk.model.dao.impl;
 
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.mappers.TestMapper;
-import ua.polischuk.model.dao.mappers.UserMapper;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.entity.User;
-import ua.polischuk.utility.SQLQwertys;
+import ua.polischuk.model.dao.SQLQwertys;
 
 import java.sql.*;
 import java.util.*;
@@ -39,6 +37,10 @@ public class JDBCTestDao implements TestRepository {
     public int getNoOfRecords() {
         return noOfRecords;
     }
+
+
+
+
     @Override
     public void save(Test entity) throws SQLException {
 

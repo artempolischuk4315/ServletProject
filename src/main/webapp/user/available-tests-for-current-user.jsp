@@ -10,7 +10,7 @@
 <html>
 <head>
 
-
+    <a href="${pageContext.request.contextPath}/logout"><fmt:message key="label.onMain" /></a>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
         <div class="col-md-1"></div>
 
         <div class="col-md-10 my-auto">
-            <table class="table" border="2">
+            <table class="table" border="2" id = "table">
                 <thead class="thead-dark">
                 <tr>
                     <th>#</th>
@@ -61,7 +61,32 @@
     </div>
 </div>
 
+<form method="post" action="${pageContext.request.contextPath}/completeTest" id="form" name="form">
+    <div>
+        <input type="text" name="name" id="name" ><br><br>
+    </div>
+</form>
+
+<script>
+
+    let table = document.getElementById('table');
+
+    for(let i = 1; i < table.rows.length; i++)
+    {
+        table.rows[i].onclick = function()
+        {
+            //rIndex = this.rowIndex;
+            document.getElementById("name").value = this.cells[1].innerHTML;
+            submitform1();
+        };
+
+    }
+    function submitform1()
+    {
+        document.forms["form"].submit();
+    }
+
+</script>
 
 
 </body>
-</html>

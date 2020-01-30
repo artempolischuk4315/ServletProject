@@ -35,7 +35,7 @@ public class Servlet extends HttpServlet {
 
 
         commands.put("logout", new LogOut());
-        commands.put("login", new Login());
+        commands.put("login", new Login(userService));
         commands.put("registration", new Registration(userService));
         commands.put("exception" ,  new Exception());
         commands.put("allUsersMenu", new AllUsersMenu());
@@ -44,6 +44,10 @@ public class Servlet extends HttpServlet {
         commands.put("allowTest", new AllowTest(testService, userService));
         commands.put("watchAvailableTestsForSelectedUser", new WatchAvailableTestsForSelectedUser(userService, testService));
         commands.put("deleteTest", new DeleteTest(testService));
+        commands.put("showAvailableTests", new ShowAvailableTests(userService));
+        commands.put("completeTest", new CompleteSelectedTest(userService));
+        commands.put("sendMail", new SendMail());
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

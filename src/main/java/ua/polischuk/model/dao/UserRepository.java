@@ -13,5 +13,6 @@ public interface UserRepository extends GenericDao<User> {
     int getNoOfRecords();
     Set<Test> getAvailableTestsSet(String email) throws SQLException;
     void addTestToAvailable(String email, String testName) throws SQLException;
+    void completeTest(String currentUserEmail, Integer completedTestsResult, String testName) throws SQLException;
 
 }

@@ -21,6 +21,7 @@ public class UserMapper implements ObjectMapper<User>{
             if (resultSet.getString(8).equals("ADMIN")) {
                 user.setRole(User.ROLE.ADMIN);
             } else user.setRole(User.ROLE.USER);
+            user.setStats(resultSet.getDouble(9));
             return user;
         }
 

@@ -3,6 +3,7 @@ package ua.polischuk.model.service;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
@@ -11,6 +12,7 @@ import ua.polischuk.utility.PasswordEncrypt;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ua.polischuk.utility.Constants.ADMIN_MAIL;
 
@@ -18,6 +20,8 @@ import static ua.polischuk.utility.Constants.ADMIN_MAIL;
 public class UserService {
     private UserRepository userRepository;
     private TestRepository testRepository;
+    private final static int MAX = 100;
+    private final static int MIN = 1;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -52,7 +56,6 @@ public class UserService {
         System.out.println("kek");
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
-            System.out.println("DSFSNDBFKJSDHFHJSDGFHJDSGBFHSDF");
             return userRepository.findByEmail(email).get();
         }
        else throw new Exception();
@@ -75,7 +78,6 @@ public class UserService {
         }
         System.out.println(user.toString());
         setRegistersOfNewUser(user);
-
         try {
             saveNewUser(user);
         } catch (SQLException e) {
@@ -109,13 +111,10 @@ public class UserService {
     public void addTestToAvailable(String email, String testName) throws Exception {
 
        try {
-           System.out.println("SERVICE");
            userRepository.addTestToAvailable(email, testName);
        }catch (SQLException e){
            throw new Exception("can`t add to available");
        }
-
-        //  userRepository.save(user);
     }
 
     private void setAvailableTestsForUser(User user, Test test) {
@@ -133,5 +132,21 @@ public class UserService {
             e.printStackTrace();
         }
         return tests;
+    }
+
+    public Set<Test> getAvailableTestsByCategory(String email, String category){
+        return getAvailableTests(email)
+                .stream()
+                .filter(test -> test.getCategory().toString().equals(category)) //TODO
+                .collect(Collectors.toSet());
+    }
+
+
+    public int setRandomResult() {
+        return (MIN + (int) (Math.random() * MAX));
+    }
+
+    public void completeTest(String email, String testName, Integer result) throws Exception {
+        userRepository.completeTest(email, result, testName);
     }
 }

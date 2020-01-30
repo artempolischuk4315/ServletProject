@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -19,6 +20,17 @@ public class User implements Serializable {
     private double stats;
 
     private Set<Test> availableTests;
+    private Map<Test, Integer> resultsOfTests;
+
+
+
+    public Map<Test, Integer> getResultsOfTests() {
+        return resultsOfTests;
+    }
+
+    public void setResultsOfTests(Map<Test, Integer> resultsOfTests) {
+        this.resultsOfTests = resultsOfTests;
+    }
 
     public Set<Test> getAvailableTests() {
         return availableTests;

@@ -15,6 +15,14 @@ public class AllUsersMenu implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+
+       /* try {
+            System.out.println("COMPLETING TEST");
+            userService.completeTest("art4315@gmail.com", "Math1");
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+        }*/
+
         PrinterPreparerWithPagination preparer = new PrinterPreparerWithPagination();
         preparer.prepareUsersListForPrintingByPages(request, userService);
         return "redirect:/admin/all-users.jsp";

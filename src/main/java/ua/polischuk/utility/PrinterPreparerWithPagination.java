@@ -6,6 +6,7 @@ import ua.polischuk.model.service.TestService;
 import ua.polischuk.model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 import java.util.List;
 
 public class PrinterPreparerWithPagination {
@@ -13,6 +14,14 @@ public class PrinterPreparerWithPagination {
     private int recordsPerPage = 5;
     private int nOfPages;
 
+    public void prepareAvailableForPrintingByPages(HttpServletRequest request, String email, UserService userService){
+        setCurrentPage(request);
+       // Collection<Test> availableTests = userService.getAvailableTests(email, currentPage, recordsPerPage);
+     //   request.getSession().setAttribute("availableTests", availableTests);
+        int rows = userService.getNoOfRecords();
+        setnOfPages(rows);
+        setSessionParams(request, nOfPages, currentPage, recordsPerPage);
+    }
 
     public void prepareUsersListForPrintingByPages(HttpServletRequest request, UserService userService){
         setCurrentPage(request);
@@ -35,6 +44,12 @@ public class PrinterPreparerWithPagination {
         setSessionParams(request, nOfPages, currentPage, recordsPerPage);
 
     }
+
+
+
+
+
+
     private void setCurrentPage(HttpServletRequest request) {
         String currentPageStr = request.getParameter("currentPage");
         if (currentPageStr != null) {

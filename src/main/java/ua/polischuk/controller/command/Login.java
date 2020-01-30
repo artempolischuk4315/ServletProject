@@ -19,21 +19,19 @@ public class Login implements Command {
 
     private UserService userService;
 
-    public Login() {
-            this.userService = ServiceFactory.getInstance().getUserService();
+    public Login(UserService userService) {
+            this.userService = userService;
     }
         @Override
         public String execute (HttpServletRequest request){
 
-            System.out.println("1");
-
             String email = request.getParameter("email");
             String pass = request.getParameter("pass");
-            System.out.println("2");
+
             if (email == null || email.equals("") || pass == null || pass.equals("")) {
                 return "/login.jsp";
             }
-            System.out.println("3");
+
             PasswordEncrypt encryptor = new PasswordEncrypt();
             String encryptedPass = null; //в отедльный метод
             try {
@@ -41,32 +39,22 @@ public class Login implements Command {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
-            System.out.println("4");
 
-          /*  if (!validation(request, email)) {
-                System.out.println("KEKSTER");
-                return "/login.jsp";//todo  error
-            }*/
 
-            System.out.println("5");
+
             User user = new User();
             if (CommandUtility.checkUserIsLogged(request, email)) {
                 return "redirect:/error.jsp"; //todo redirect on right error
             }
 
-            System.out.println("6");
-
-                try {
-                    user = userService.findByEmail(email);
-                } catch (java.lang.Exception e) {
-                    e.printStackTrace();
-                    return "redirect:/login.jsp";
-                }
+            try {
+                user = userService.findByEmail(email);
+            } catch (java.lang.Exception e) {
+                e.printStackTrace();
+                return "redirect:/login.jsp";
+            }
 
 
-            System.out.println(user.getEmail());
-
-            System.out.println("7");
             if (user.getEmail().equals("art4315@gmail.com") && user.getPassword().equals(encryptedPass)) {
                 CommandUtility.setUserRole(request, User.ROLE.ADMIN, email);
                 CommandUtility.addUserToContext(request, email);
@@ -79,7 +67,6 @@ public class Login implements Command {
                 return "redirect:/user/user-hello.jsp";
             } else {
                // CommandUtility.setUserRole(request, User.ROLE.UNKNOWN, email);
-                System.out.println("KEK IS HERE");
                 return "/login.jsp";//todo  error
             }
 
@@ -99,6 +86,7 @@ public class Login implements Command {
         private void setAttribute (HttpServletRequest req, User user){
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("role", user.getRole());
+            req.getSession().setAttribute("email", user.getEmail());
 
         }
 
