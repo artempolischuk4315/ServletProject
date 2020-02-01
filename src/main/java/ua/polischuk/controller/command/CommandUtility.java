@@ -20,25 +20,26 @@ public class CommandUtility {
 
     static boolean checkUserIsLogged(HttpServletRequest request, String userName){
 
-        HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext()
+        HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
         System.out.println("Logged: "+loggedUsers);
         System.out.println(userName);
         if(loggedUsers.stream().anyMatch(userName::equals)){
             return true;
         }
+        System.out.println("COMMAND UT");
        /* loggedUsers.add(userName);
         request.getSession().getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);*/
         return false;
     }
 
-    static boolean deleteUserFromContext(HttpServletRequest request, String userName){
-        HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext()
+    public static boolean deleteUserFromContext(HttpServletRequest request, String userName){
+        HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
 
         System.out.println("delete userName " + userName);
-
+        System.out.println("COMMAND UT2");
         loggedUsers.remove(userName);
         request.getSession().getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);
@@ -46,11 +47,11 @@ public class CommandUtility {
     }
 
     static void addUserToContext(HttpServletRequest request, String userName) {
-        HashSet<String> loggedUsers = (HashSet<String>) request.getSession().getServletContext()
+        HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
-
+        System.out.println("COMMAND UT1");
         loggedUsers.add(userName);
-        request.getSession().getServletContext()
+        request.getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);
 
     }

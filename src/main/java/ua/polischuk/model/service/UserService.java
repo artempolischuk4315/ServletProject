@@ -137,7 +137,8 @@ public class UserService {
     public Set<Test> getAvailableTestsByCategory(String email, String category){
         return getAvailableTests(email)
                 .stream()
-                .filter(test -> test.getCategory().toString().equals(category)) //TODO
+                .filter(test -> test.getCategory().toString().equals(category))
+                .filter(test -> test.isActive())
                 .collect(Collectors.toSet());
     }
 
@@ -149,4 +150,9 @@ public class UserService {
     public void completeTest(String email, String testName, Integer result) throws Exception {
         userRepository.completeTest(email, result, testName);
     }
+
+    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
+        return userRepository.getCompletedTestsByEmail(email);
+    }
+
 }

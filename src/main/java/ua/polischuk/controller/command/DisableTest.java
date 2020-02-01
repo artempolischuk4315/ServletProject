@@ -4,10 +4,10 @@ import ua.polischuk.model.service.TestService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class DeleteTest implements Command {
+public class DisableTest implements Command {
     private TestService testService;
 
-    public DeleteTest(TestService testService) {
+    public DisableTest(TestService testService) {
         this.testService = testService;
     }
 
@@ -15,7 +15,7 @@ public class DeleteTest implements Command {
     public String execute(HttpServletRequest request) {
         String testName = request.getParameter("testName");
         try {
-            testService.deleteTest(testName);
+            testService.enableOrDisableTest(testName, false);
         } catch (java.lang.Exception e) {
             e.printStackTrace();
         }

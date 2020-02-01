@@ -36,22 +36,23 @@
                     <th><fmt:message key="label.difficulty"/></th>
                     <th><fmt:message key="label.numOfQ"/></th>
                     <th><fmt:message key="label.timeLimit"/></th>
-                    <th><fmt:message key="label.isActive"/></th>
+                    <th><fmt:message key="label.result"/></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:set var="counter" value="1"/>
-                <c:forEach items="${availableTests}" var="availableTests">
+                <c:forEach items="${completedTests}" var="completedTests">
                     <tr>
+
                         <th scope="row"><c:out value="${counter}"/></th>
-                        <td><c:out value="${availableTests.name}"/></td>
-                        <td><c:out value="${availableTests.nameUa}"/></td>
-                        <td><c:out value="${availableTests.category}"/></td>
-                        <td><c:out value="${availableTests.difficulty}"/></td>
-                        <td><c:out value="${availableTests.numberOfQuestions}"/></td>
-                        <td><c:out value="${availableTests.timeLimit}"/></td>
-                        <td><c:out value="${availableTests.active}"/></td>
+                        <td><c:out value="${completedTests.name}"/></td>
+                        <td><c:out value="${completedTests.nameUa}"/></td>
+                        <td><c:out value="${completedTests.category}"/></td>
+                        <td><c:out value="${completedTests.difficulty}"/></td>
+                        <td><c:out value="${completedTests.numberOfQuestions}"/></td>
+                        <td><c:out value="${completedTests.timeLimit}"/></td>
+                        <td><c:out value="${completedTests.result}"/></td>
                     </tr>
                     <c:set var="counter" value="${counter+1}"/>
                 </c:forEach>

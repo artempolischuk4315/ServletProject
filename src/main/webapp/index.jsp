@@ -9,7 +9,10 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 
-
+<c:if test = "${sessionScope.logout==true}">
+<label class="alert alert-info" ><fmt:message key="alert.logout"/></label>
+</c:if>
+<c:remove var="logout" scope="session"/>
 <script>
     function replace_search(name, value) {
         var str = location.search;

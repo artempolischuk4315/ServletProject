@@ -21,14 +21,17 @@ public class JDBCTestDao implements TestRepository {
     @Override
     public Optional<Test> findByName(String name) throws SQLException {
         TestMapper testMapper = new TestMapper();
-        Statement stmt = connection.createStatement();
-        String q1 = "select * from test WHERE name = '" + name + "'";
 
-        ResultSet resultSet = stmt.executeQuery(q1);
-        Test test = new Test();
-        if (resultSet.next())
-        {
-            test = testMapper.extractFromResultSet(resultSet);
+        String q1 = "select * from test WHERE name = '" + name + "'";
+        Test test = null;
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet resultSet = stmt.executeQuery(q1);
+            if (resultSet.next()) {
+                test = testMapper.extractFromResultSet(resultSet);
+            }
+        }catch (SQLException e){
+            throw new SQLException();
         }
         return Optional.of(test);
     }
@@ -53,6 +56,7 @@ public class JDBCTestDao implements TestRepository {
             preparedStatement.setInt(4, entity.getDifficulty());
             preparedStatement.setInt(5, entity.getNumberOfQuestions());
             preparedStatement.setInt(6, entity.getTimeLimit());
+            preparedStatement.setBoolean(7, entity.isActive());
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -61,24 +65,7 @@ public class JDBCTestDao implements TestRepository {
         }
 
     }
-    private Test getTestFromResultSet(ResultSet resultSet) throws SQLException {
-        Test test= new Test();
-        try {
-            test.setId(resultSet.getInt(1));
-            test.setName(resultSet.getString(2));
-            test.setNameUa(resultSet.getString(3));
-            test.setCategory(Category.getCategoryByString(resultSet.getString(4)));
-            test.setDifficulty(resultSet.getInt(5));
-            test.setNumberOfQuestions(resultSet.getInt(6));
-            test.setTimeLimit(resultSet.getInt(7));
 
-        } catch (SQLException e) {
-            System.out.println("here   " + test.toString());
-            e.printStackTrace();
-            throw new SQLException();
-        }
-        return test;
-    }
     @Override
     public Test findById(int id) {
         return null;
@@ -131,6 +118,23 @@ public class JDBCTestDao implements TestRepository {
             preparedStatement.setString(1, testName);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException();
+        }
+
+    }
+
+    @Override
+    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+        Statement statement = connection.createStatement();
+        String updateTest=
+                        "   UPDATE test " +
+                        "   SET active =  "+active +
+                        "   WHERE name = '"+ nameOfTest+"'";
+        try {
+            // statement.executeQuery(dropTestFromAvailable);
+            statement.executeUpdate(updateTest);
+        }catch (SQLException e){
             e.printStackTrace();
             throw new SQLException();
         }

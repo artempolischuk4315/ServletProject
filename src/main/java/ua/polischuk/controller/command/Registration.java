@@ -1,6 +1,7 @@
 package ua.polischuk.controller.command;
 
 import ua.polischuk.model.service.UserService;
+import ua.polischuk.utility.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,13 +12,12 @@ import static ua.polischuk.utility.Constants.*;
 
 public class Registration implements Command {
 
-    //TODO validation
-
+    UserService userService;
     public Registration(UserService userService) {
         this.userService = userService;
     }
 
-    UserService userService;
+
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -29,15 +29,22 @@ public class Registration implements Command {
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
 
-        try {
-            userService.setUserParamsAndSave(firstName, firstNameUa, lastName, lastNameUa, email, password);
-        }catch (RuntimeException e){
-            System.out.println("LOLKEK");
-            e.printStackTrace();
-            return "/registration.jsp";
+        Validator validator = new Validator();
+        if(!validator.validateUser(firstName, firstNameUa, lastName, lastNameUa, email)){
+            System.out.println("NOT VALID DATA");
+            request.getSession().setAttribute("notValidData", true);
+            return "redirect:/registration.jsp";
         }
 
-        return "redirect:/index.jsp";
+        try {
+            userService.setUserParamsAndSave(firstName, firstNameUa, lastName, lastNameUa, email, password);
+            request.getSession().setAttribute("successRegistr", true);
+        }catch (RuntimeException e){
+            request.getSession().setAttribute("userAlreadyExists", true);
+            return "redirect:/registration.jsp";
+        }
+
+        return "redirect:/login.jsp";
 
         //return "/index.jsp";
     }

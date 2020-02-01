@@ -13,6 +13,11 @@
 
 </head>
 <body>
+<c:if test = "${sessionScope.noAvailableTests==true}">
+    <label class="alert alert-info" ><fmt:message key="alert.noAvTests"/></label>
+</c:if>
+<c:remove var="noAvailableTests" scope="session"/>
+
 
 
 <a href="${pageContext.request.contextPath}/logout"><fmt:message key="label.onMain" /></a>
@@ -20,13 +25,16 @@
     <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
     <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 </ul>
-<form method="post" action="${pageContext.request.contextPath}/admin/allow-test.jsp">
-    <input class="button" type="submit" value=<fmt:message key="label.addTest" />>
+<form method="post" action="${pageContext.request.contextPath}/goOnAllowPage">
+    <fmt:message key="label.allowTest" var="myMessage"/>
+    <input class="btn btn-secondary btn-lg btn-block" type="submit" value="${myMessage}">
 </form>
 <form method="post" action="${pageContext.request.contextPath}/watchAvailableTestsForSelectedUser">
 
-    <input type="text" name="email"><br/>
-    <input class="button" type="submit" value=<fmt:message key="label.submit" />>
+    <h3>  <fmt:message key="title.watchAvailable"/></h3>
+    <input type="text" name="email" pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"><br/>
+    <fmt:message key="label.watchAvailable" var="myMessage1"/>
+    <input class="btn btn-secondary btn-lg btn-block" type="submit" value="${myMessage1}">
 
 </form>
 <div class="container">

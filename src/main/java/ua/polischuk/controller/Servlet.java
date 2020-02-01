@@ -33,21 +33,22 @@ public class Servlet extends HttpServlet {
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
 
-
         commands.put("logout", new LogOut());
         commands.put("login", new Login(userService));
         commands.put("registration", new Registration(userService));
         commands.put("exception" ,  new Exception());
-        commands.put("allUsersMenu", new AllUsersMenu());
-        commands.put("createTest", new CreateTest());
+        commands.put("allUsersMenu", new AllUsersMenu(userService));
+        commands.put("createTest", new CreateTest(testService));
         commands.put("allTests", new ShowAllTests(testService));
         commands.put("allowTest", new AllowTest(testService, userService));
         commands.put("watchAvailableTestsForSelectedUser", new WatchAvailableTestsForSelectedUser(userService, testService));
-        commands.put("deleteTest", new DeleteTest(testService));
+        commands.put("disableTest", new DisableTest(testService));
+        commands.put("enableTest", new EnableTest(testService));
         commands.put("showAvailableTests", new ShowAvailableTests(userService));
         commands.put("completeTest", new CompleteSelectedTest(userService));
         commands.put("sendMail", new SendMail());
-
+        commands.put("watchCompletedTests", new WatchCompletedTest(userService));
+        commands.put("goOnAllowPage", new GoOnAllowPage(testService, userService));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

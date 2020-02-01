@@ -9,7 +9,10 @@
 <fmt:setBundle basename="messages"/>
 
 <body>
-
+<c:if test = "${sessionScope.successRegistr==true}">
+    <label class="alert alert-info" ><fmt:message key="alert.successRegistr"/></label>
+</c:if>
+<c:remove var="notValidData" scope="session"/>
 
         <form method="post" action="${pageContext.request.contextPath}/login">
 

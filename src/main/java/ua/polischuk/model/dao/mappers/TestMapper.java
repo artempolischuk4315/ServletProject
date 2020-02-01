@@ -18,6 +18,7 @@ public class TestMapper implements ObjectMapper<Test> {
         test.setDifficulty(resultSet.getInt(5));
         test.setNumberOfQuestions(resultSet.getInt(6));
         test.setTimeLimit(resultSet.getInt(6));
+        test.setActive(resultSet.getBoolean(9));
         return test;
     }
 

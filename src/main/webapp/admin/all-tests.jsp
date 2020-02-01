@@ -14,9 +14,16 @@
 </head>
 <body>
 
-<form method="post" action="${pageContext.request.contextPath}/deleteTest">
+<form method="post" action="${pageContext.request.contextPath}/disableTest">
     <input type="text" name="testName"><br/>
-    <input class="button" type="submit" value=<fmt:message key="label.deleteTest" />>
+    <fmt:message key="label.disableTest" var="myMessage1"/>
+    <input class="btn btn-secondary btn-lg btn-block" type="submit" value="${myMessage1}">
+</form>
+
+<form method="post" action="${pageContext.request.contextPath}/enableTest">
+    <input type="text" name="testName"><br/>
+    <fmt:message key="label.enableTest" var="myMessage"/>
+    <input class="btn btn-secondary btn-lg btn-block" type="submit" value="${myMessage}">
 </form>
 
 <a href="${pageContext.request.contextPath}/logout"><fmt:message key="label.onMain" /></a>
@@ -40,6 +47,7 @@
                     <th><fmt:message key="label.difficulty"/></th>
                     <th><fmt:message key="label.numOfQ"/></th>
                     <th><fmt:message key="label.timeLimit"/></th>
+                    <th><fmt:message key="label.isActive"/></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -55,6 +63,7 @@
                         <td><c:out value="${allTests.difficulty}"/></td>
                         <td><c:out value="${allTests.numberOfQuestions}"/></td>
                         <td><c:out value="${allTests.timeLimit}"/></td>
+                        <td><c:out value="${allTests.active}"/></td>
 
                     </tr>
                     <c:set var="counter" value="${counter+1}"/>

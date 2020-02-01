@@ -8,6 +8,7 @@ import ua.polischuk.model.entity.Test;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TestService {
 
@@ -22,8 +23,10 @@ public class TestService {
     }
 
     public Test findTestByName(String name) throws Exception {
-        Test test = testRepository.findByName(name).orElseThrow(Exception::new);
-        return test;
+        Optional<Test> test = testRepository.findByName(name);
+        if(test.isPresent()){
+            return testRepository.findByName(name).get();
+        }else throw new Exception();
     }
 
     public List<Test> findAll(int offset, int recPerPage)  {
@@ -40,12 +43,16 @@ public class TestService {
     }
 
     public void saveNewTest (Test test) throws Exception{
+        test.setActive(true);
         testRepository.save(test);
     }
 
     public void deleteTest (String testName) throws Exception{
-
         testRepository.delete(testName);
+    }
+
+    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+        testRepository.enableOrDisableTest(nameOfTest, active);
     }
 
 

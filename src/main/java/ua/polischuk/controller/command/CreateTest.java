@@ -4,6 +4,7 @@ import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.service.ServiceFactory;
 import ua.polischuk.model.service.TestService;
+import ua.polischuk.utility.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,8 +15,8 @@ public class CreateTest implements Command {
 
     private TestService testService;
 
-    public CreateTest() {
-        this.testService = ServiceFactory.getInstance().getTestService();
+    public CreateTest(TestService testService) {
+        this.testService = testService;
     }
 
 
@@ -29,13 +30,20 @@ public class CreateTest implements Command {
         int numberOfQuestions = Integer.parseInt(request.getParameter(NUMB_OF_QUESTIONS));
         int timeLimit = Integer.parseInt(request.getParameter(TIME_LIMIT));
 
+        System.out.println("HERE I AM");
+        System.out.println(String.valueOf(category));
         Test test = new Test(name, nameUa, category, difficulty, numberOfQuestions, timeLimit);
-
+        Validator validator = new Validator();
+        if(!validator.validateTest(name, nameUa, category, difficulty, numberOfQuestions, timeLimit)){
+            return "redirect:/admin/add-test.jsp";
+        }
 
         try {
             testService.saveNewTest(test);
+            request.getSession().setAttribute("createdTest", true);
         } catch (java.lang.Exception e) {
-            e.printStackTrace();
+            request.getSession().setAttribute("notCreatedTest", true);
+            return "redirect:/admin/add-test.jsp";
         }
 
         return "redirect:/admin/admin-hello.jsp";

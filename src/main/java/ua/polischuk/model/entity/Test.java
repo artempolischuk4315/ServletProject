@@ -11,8 +11,17 @@ public class Test implements Serializable {
     private int numberOfQuestions;
     private int timeLimit;
     private int result;
+    private boolean active;
 
     public Test() {
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Test(String name, String nameUa, Category category, int difficulty, int numberOfQuestions, int timeLimit) {

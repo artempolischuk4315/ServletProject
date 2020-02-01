@@ -8,14 +8,11 @@ import ua.polischuk.utility.PasswordValidator;
 import ua.polischuk.utility.Validator;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
-import java.util.Optional;
+
 
 public class Login implements Command {
+    private final static String ADMIN_MAIL = "art4315@gmail.com";
 
     private UserService userService;
 
@@ -43,8 +40,9 @@ public class Login implements Command {
 
 
             User user = new User();
+            double stats = 0;
             if (CommandUtility.checkUserIsLogged(request, email)) {
-                return "redirect:/error.jsp"; //todo redirect on right error
+                return "redirect:/index.jsp"; //todo redirect on right error
             }
 
             try {
@@ -55,7 +53,7 @@ public class Login implements Command {
             }
 
 
-            if (user.getEmail().equals("art4315@gmail.com") && user.getPassword().equals(encryptedPass)) {
+            if (user.getEmail().equals(ADMIN_MAIL) && user.getPassword().equals(encryptedPass)) {
                 CommandUtility.setUserRole(request, User.ROLE.ADMIN, email);
                 CommandUtility.addUserToContext(request, email);
                 setAttribute(request, user);
@@ -87,6 +85,7 @@ public class Login implements Command {
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("role", user.getRole());
             req.getSession().setAttribute("email", user.getEmail());
+            req.getSession().setAttribute("stats", user.getStats());
 
         }
 

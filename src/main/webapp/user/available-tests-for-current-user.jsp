@@ -63,7 +63,7 @@
 
 <form method="post" action="${pageContext.request.contextPath}/completeTest" id="form" name="form">
     <div>
-        <input type="text" name="name" id="name" ><br><br>
+        <input type="text" name="name" id="name" hidden><br><br>
     </div>
 </form>
 

@@ -16,29 +16,32 @@
     <fmt:setBundle basename="messages"/>
 </head>
 <body>
-
+<c:if test = "${sessionScope.notCreatedTest==true}">
+    <label class="alert alert-info" ><fmt:message key="alert.notCreatedTest"/></label>
+</c:if>
+<c:remove var="notCreatedTest" scope="session"/>
 <form method="post" action="${pageContext.request.contextPath}/createTest">
 
     <h3><fmt:message key="label.input.testName" /></h3>
-    <input type="text" name="name"><br/>
+    <input type="text" name="name" pattern="^[a-zA-Z0-9]+$" required><br/>
     <h3><fmt:message key="label.input.testNameUa" /></h3>
-    <input type="text" name="nameUa"><br/>
-    <fieldset>
+    <input type="text" name="nameUa" pattern="[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ'0-9]+$" required><br/>
+    <fieldset >
         <input type="radio" id="MATH" name="category" value="MATH">
-        <label for="MATH" >MATH</label>
+        <label for="MATH" ><fmt:message key="label.category.math" /></label>
         <input type="radio" id="HISTORY" name="category" value="HISTORY">
-        <label for="HISTORY" >HISTORY</label>
+        <label for="HISTORY" ><fmt:message key="label.category.history" /></label>
         <input type="radio" id="PHYSICS" name="category" value="PHYSICS">
-        <label for="PHYSICS" >PHYSICS</label>
+        <label for="PHYSICS" ><fmt:message key="label.category.physics" /></label>
         <input type="radio" id="PROGRAMMING" name="category" value="PROGRAMMING">
-        <label for="PROGRAMMING" >PROGR</label>
+        <label for="PROGRAMMING" ><fmt:message key="label.category.progr" /></label>
     </fieldset>
     <h3><fmt:message key="label.input.difficulty" /></h3>
-    <input type="number" name="difficulty"><br/>
+    <input type="number" name="difficulty" pattern="^(?:[1-9]|0[1-9]|10)$" required ><br/>
     <h3><fmt:message key="label.input.numberOfQuestions" /></h3>
-    <input type="number" name="numberOfQuestions"><br/>
+    <input type="number" name="numberOfQuestions" pattern="[0-9]{1,2}$" required ><br/>
     <h3><fmt:message key="label.input.timeLimit" /></h3>
-    <input type="number" name="timeLimit"><br/>
+    <input type="number" name="timeLimit" pattern="[0-9]{1,3}$" required ><br/>
     <input class="button" type="submit" value=<fmt:message key="label.submit" />>
 
 

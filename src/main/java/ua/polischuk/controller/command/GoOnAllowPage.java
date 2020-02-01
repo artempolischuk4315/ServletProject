@@ -1,43 +1,40 @@
-package ua.polischuk.utility;
+package ua.polischuk.controller.command;
 
-import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.service.TestService;
 import ua.polischuk.model.service.UserService;
+import ua.polischuk.utility.PrinterPreparerWithPagination;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 import java.util.List;
 
-public class PrinterPreparerWithPagination {
+public class GoOnAllowPage implements Command {
+    TestService testService;
+    UserService userService;
+
     private int currentPage;
     private int recordsPerPage = 5;
     private int nOfPages;
 
-    public void prepareUsersListForPrintingByPages(HttpServletRequest request, UserService userService){
+    public GoOnAllowPage(TestService testService, UserService userService) {
+        this.testService = testService;
+        this.userService = userService;
+    }
+
+    @Override
+    public String execute(HttpServletRequest request) {
+
         setCurrentPage(request);
-        List<User> allUsers =userService.getAllUsers((currentPage-1)*recordsPerPage,
+        List<User> users =userService.getAllUsers((currentPage-1)*recordsPerPage,
                 recordsPerPage);
-        request.getSession().setAttribute("allUsers", allUsers);
+        request.getSession().setAttribute("users", users);
         int rows = userService.getNoOfRecords();
-
         setnOfPages(rows);
         setSessionParams(request, nOfPages, currentPage, recordsPerPage);
+
+
+        return "redirect:/admin/allow-test.jsp";
     }
-
-    public void prepareTestsListForPrintingByPages(HttpServletRequest request, TestService testService){
-        setCurrentPage(request);
-        List<Test> allTests = testService.findAll((currentPage-1)*recordsPerPage, recordsPerPage);
-        request.getSession().setAttribute("allTests", allTests);
-        int rows = testService.getNoOfRecords();
-        setnOfPages(rows);
-        System.out.println("ROWS "+rows);
-        setSessionParams(request, nOfPages, currentPage, recordsPerPage);
-
-    }
-
-
-
 
 
 
@@ -54,7 +51,7 @@ public class PrinterPreparerWithPagination {
     }
 
     public void setnOfPages(int rows) {
-         nOfPages = rows  / recordsPerPage;
+        nOfPages = rows  / recordsPerPage;
 
         if (nOfPages % recordsPerPage > 0) {
             nOfPages++;

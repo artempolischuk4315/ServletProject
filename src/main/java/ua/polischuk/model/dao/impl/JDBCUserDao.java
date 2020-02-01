@@ -1,6 +1,7 @@
 package ua.polischuk.model.dao.impl;
 
 import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.dao.mappers.TestMapper;
 import ua.polischuk.model.dao.mappers.UserMapper;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
@@ -82,18 +83,6 @@ public class JDBCUserDao implements UserRepository {
     }
 
 
-  /*  private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        try {
-
-            System.out.println(user.toString());
-        } catch (SQLException e) {
-            System.out.println("here   " + user.toString());
-            e.printStackTrace();
-            throw new SQLException();
-        }
-        return user;
-    }*/
 
     @Override
     public void update(User entity) {
@@ -111,7 +100,7 @@ public class JDBCUserDao implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(String email)  {
+    public Optional<User> findByEmail(String email) throws SQLException {
 
         UserMapper userMapper = new UserMapper();
         User user = null;
@@ -123,7 +112,7 @@ public class JDBCUserDao implements UserRepository {
               user = userMapper.extractFromResultSet(resultSet);
           }
       }catch (SQLException e){
-          e.printStackTrace();
+          throw new SQLException();
       }
 
         return Optional.of(user);
@@ -134,20 +123,20 @@ public class JDBCUserDao implements UserRepository {
         return noOfRecords;
     }
 
-    public void addTestToAvailable(String email, String testName)  {
-        System.out.println("DAO");
-        String sql = "INSERT INTO available_tests (user_id, test_id) " +
+    public void addTestToAvailable(String email, String testName) throws SQLException {
+        String sql =
+                "INSERT INTO available_tests (user_id, test_id) " +
                 "SELECT u.id, t.id " +
                 "FROM user u, test t " +
                 "WHERE u.email = ? " +
                 "AND t.name = ?";
-        System.out.println("AFTER QUERY");
+
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, testName);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+           throw new SQLException();
         }
     }
 
@@ -158,6 +147,11 @@ public class JDBCUserDao implements UserRepository {
             connection.setAutoCommit(false);
             int userId = findIdByField(email, statement, "user", "email");
             int testId = findIdByField(testName, statement, "test", "name");
+
+            if(!checkIfTestIsActive(testId, statement)){
+                throw new SQLException("TEST REMOVED FROM AVAILABLE");
+            }
+
             dropTestFromAvailable(userId, testId, statement);
             addTestToCompleted(userId, testId, result, statement);
             HashMap<Integer ,Integer> completedTestsAndResults = (HashMap<Integer, Integer>)
@@ -172,6 +166,21 @@ public class JDBCUserDao implements UserRepository {
             throw new SQLException();
         }
 
+    }
+
+    private boolean checkIfTestIsActive(int idOfTest, Statement statement) throws SQLException {
+        boolean isActive = false;
+        String sql = "select active from test where id = "+idOfTest;
+        try {
+            ResultSet  resultSet = statement.executeQuery(sql);
+            if (resultSet.next()){
+                isActive = resultSet.getBoolean(1);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+        return isActive;
     }
 
     private void updateUserStats(Statement statement, double stats, int id) throws SQLException {
@@ -218,8 +227,55 @@ public class JDBCUserDao implements UserRepository {
         return completedTestsIdWithResults;
     }
 
-    private void addTestToCompleted(int userId, int testId, int result, Statement statement) throws SQLException {
+    @Override
+    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
+        ArrayList<Test> completedTests = new ArrayList<>();
+        String sql =
+                "SELECT  test.* "+
+                " FROM completed_tests "+
+                "INNER JOIN test "+
+                "ON completed_tests.test_id = test.id "+
+                "INNER JOIN user "+
+                "ON completed_tests.user_id = user.id "+
+                "WHERE user.email = '" + email + "'";
 
+        Map<Integer, Test> tests = new HashMap<>();
+        TestMapper testMapper = new TestMapper();
+
+
+        try(Statement stmt = connection.createStatement()) {
+            connection.setAutoCommit(false);
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+                Test test = testMapper.extractFromResultSet(resultSet);
+                test = testMapper.makeUnique(tests, test);
+                completedTests.add(test);
+            }
+            resultSet.close();
+
+            String getResults =
+                    "SELECT result FROM completed_tests" +
+                            " INNER JOIN user ON completed_tests.user_id =" +
+                            " user.id WHERE user.email = '" + email + "'";
+
+            resultSet = stmt.executeQuery(getResults);
+            int count = 0;
+            while (resultSet.next()) {
+                completedTests.get(count).setResult(resultSet.getInt(1));
+                count++;
+            }
+
+            connection.commit();
+            connection.setAutoCommit(true);
+        }catch (SQLException e){
+            connection.rollback();
+            throw new SQLException();
+        }
+        return completedTests;
+
+    }
+
+    private void addTestToCompleted(int userId, int testId, int result, Statement statement) throws SQLException {
         HashMap<Integer, Integer> completedTests = (HashMap<Integer, Integer>) getSetOfCompletedTestsByUserId(statement, userId);
         if(completedTests.containsKey(testId)){
            String dropTestFromCompleted = "delete from completed_tests where test_id = "+testId;
@@ -231,7 +287,6 @@ public class JDBCUserDao implements UserRepository {
                throw new SQLException();
            }
        }
-
         String addTestToCompleted =
                 "INSERT INTO completed_tests (user_id, result, test_id) VALUES ("+userId +", "+ result+", "+ testId+")";
         try {
@@ -256,10 +311,8 @@ public class JDBCUserDao implements UserRepository {
         } //проверяем, не прошли ли тест в другом окне пока это ждало
         resultSet.close();
 
-
         String dropTestFromAvailable = "delete from available_tests where user_id ="+userId + " and test_id = "+testId ;
         try {
-
             statement.executeUpdate(dropTestFromAvailable);
         }catch (SQLException e){
             throw new SQLException();
@@ -286,7 +339,7 @@ public class JDBCUserDao implements UserRepository {
     @Override
     public Set<Test> getAvailableTestsSet(String email) throws SQLException {
         Set<Test> tests = new HashSet<>();
-
+        TestMapper testMapper = new TestMapper();
         String sql = "SELECT test.* "+
                 " FROM available_tests "+
                 "INNER JOIN test "+
@@ -294,31 +347,17 @@ public class JDBCUserDao implements UserRepository {
                 "INNER JOIN user "+
                 "ON available_tests.user_id = user.id "+
                 "WHERE user.email = '" + email + "'";
-                //+" limit "+offset+", "+recordsPerPage;
+
 
        Statement stmt = connection.createStatement();
-      //  connection.setAutoCommit(false);
 
         ResultSet resultSet = stmt.executeQuery(sql);
         while (resultSet.next()){
             Test test = new Test();
-            test.setId(resultSet.getInt(1));
-            test.setName(resultSet.getString(2));
-            test.setNameUa(resultSet.getString(3));
-            test.setCategory(Category.getCategoryByString(resultSet.getString(8)));
-            test.setDifficulty(resultSet.getInt(4));
-            test.setNumberOfQuestions(resultSet.getInt(5));
-            test.setTimeLimit(resultSet.getInt(6));
+            test = testMapper.extractFromResultSet(resultSet);
             tests.add(test);
         }
-       // resultSet.close();
-       /* resultSet = stmt.executeQuery("SELECT COUNT(*) from available_tests");
 
-        if (resultSet.next())
-            noOfRecords = resultSet.getInt(1);
-
-        connection.commit();
-        connection.setAutoCommit(true);*/
         return tests;
     }
 
