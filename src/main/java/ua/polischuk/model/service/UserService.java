@@ -1,9 +1,9 @@
 package ua.polischuk.model.service;
 
+import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
-import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
@@ -22,23 +22,20 @@ public class UserService {
     private TestRepository testRepository;
     private final static int MAX = 100;
     private final static int MIN = 1;
+    private static final Logger log = Logger.getLogger( UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public UserService() {
-        try {
             this.userRepository = DaoFactory.getInstance().createUserDao();
             this.testRepository = DaoFactory.getInstance().createTestDao();
-            ;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
     public List<User> getAllUsers(int page, int recPerPage) {
+        log.info(LoggerInfo.GETTING_ALL_USERS);
         List<User> users = new ArrayList<>();
         try {
             users = userRepository.findAll(page, recPerPage);
@@ -53,9 +50,10 @@ public class UserService {
     }
 
     public User findByEmail(String email) throws Exception {
-        System.out.println("kek");
+       log.info(LoggerInfo.FINDING_BY_EMAIL);
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
+            log.info(LoggerInfo.USER_IS_PRESENT);
             return userRepository.findByEmail(email).get();
         }
        else throw new Exception();
@@ -76,11 +74,12 @@ public class UserService {
         if (email.equals(ADMIN_MAIL)) {
             user.setRole(User.ROLE.ADMIN);
         }
-        System.out.println(user.toString());
+
         setRegistersOfNewUser(user);
         try {
             saveNewUser(user);
         } catch (SQLException e) {
+            log.info(LoggerInfo.ERROR_SAVING_USER +user.getEmail());
             throw new RuntimeException();
         }
         return false;
@@ -93,8 +92,7 @@ public class UserService {
     }
 
     private void setRegistersOfNewUser(User user) {
-        System.out.println("Reg");
-        //user.setRole(User.ROLE.USER);
+
         user.setFirstName(user.getFirstName().substring(0, 1).toUpperCase() +
                 user.getFirstName().substring(1).toLowerCase());
         user.setLastName(user.getLastName().substring(0, 1).toUpperCase() +
@@ -103,7 +101,6 @@ public class UserService {
                 user.getFirstNameUa().substring(1).toLowerCase());
         user.setLastNameUa(user.getLastNameUa().substring(0, 1).toUpperCase() +
                 user.getLastNameUa().substring(1).toLowerCase());
-        //TODO: encrypt password
 
     }
 
@@ -113,15 +110,11 @@ public class UserService {
        try {
            userRepository.addTestToAvailable(email, testName);
        }catch (SQLException e){
-           throw new Exception("can`t add to available");
+           log.error(LoggerInfo.ERROR_ADD_TO_AVAILABLE);
+           throw new Exception();
        }
     }
 
-    private void setAvailableTestsForUser(User user, Test test) {
-        HashSet<Test> t = new HashSet<>();
-        t.add(test);
-        user.setAvailableTests(t);
-    }
 
     public Set<Test> getAvailableTests(String email) {
         Set<Test> tests = new HashSet<>();
@@ -129,7 +122,7 @@ public class UserService {
         try {
             tests = userRepository.getAvailableTestsSet(email);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(LoggerInfo.ERROR_GETTING_AVAILABLE_TESTS);
         }
         return tests;
     }
@@ -148,10 +141,12 @@ public class UserService {
     }
 
     public void completeTest(String email, String testName, Integer result) throws Exception {
+        log.info(LoggerInfo.COMPLETING_TEST);
         userRepository.completeTest(email, result, testName);
     }
 
     public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
+        log.info(LoggerInfo.GET_COMPLETED_TESTS);
         return userRepository.getCompletedTestsByEmail(email);
     }
 

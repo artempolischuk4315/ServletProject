@@ -31,7 +31,6 @@ public class Registration implements Command {
 
         Validator validator = new Validator();
         if(!validator.validateUser(firstName, firstNameUa, lastName, lastNameUa, email)){
-            System.out.println("NOT VALID DATA");
             request.getSession().setAttribute("notValidData", true);
             return "redirect:/registration.jsp";
         }
@@ -43,9 +42,7 @@ public class Registration implements Command {
             request.getSession().setAttribute("userAlreadyExists", true);
             return "redirect:/registration.jsp";
         }
-
         return "redirect:/login.jsp";
 
-        //return "/index.jsp";
     }
 }

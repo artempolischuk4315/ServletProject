@@ -1,5 +1,6 @@
 package ua.polischuk.model.service;
 
+import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
@@ -13,29 +14,32 @@ import java.util.Optional;
 public class TestService {
 
     private TestRepository testRepository;
+    private static final Logger log = Logger.getLogger( TestService.class);
 
     public TestService() {
-        try{
             this.testRepository = DaoFactory.getInstance().createTestDao();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     public Test findTestByName(String name) throws Exception {
+        log.info(LoggerInfo.FINDING_BY_NAME);
         Optional<Test> test = testRepository.findByName(name);
         if(test.isPresent()){
+            log.info(LoggerInfo.OPERATION_SUCCESSFUL);
             return testRepository.findByName(name).get();
         }else throw new Exception();
+
+
     }
 
     public List<Test> findAll(int offset, int recPerPage)  {
+        log.info(LoggerInfo.FINDING_ALL);
         List<Test> tests = new ArrayList<>();
         try{
              tests = testRepository.findAll(offset, recPerPage);
     }catch (Exception e){
-            
+            log.error(LoggerInfo.ERROR_GETTING_ALL_TESTS);
         }
+        log.info(LoggerInfo.OPERATION_SUCCESSFUL);
         return tests;
     }
     public int getNoOfRecords() {
@@ -43,15 +47,14 @@ public class TestService {
     }
 
     public void saveNewTest (Test test) throws Exception{
+        log.info(LoggerInfo.SAVING_TEST);
         test.setActive(true);
         testRepository.save(test);
     }
 
-    public void deleteTest (String testName) throws Exception{
-        testRepository.delete(testName);
-    }
 
     public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+        log.info(LoggerInfo.ENABLE_OR_DISABLE_TEST);
         testRepository.enableOrDisableTest(nameOfTest, active);
     }
 

@@ -31,7 +31,6 @@ public class PrinterPreparerWithPagination {
         request.getSession().setAttribute("allTests", allTests);
         int rows = testService.getNoOfRecords();
         setnOfPages(rows);
-        System.out.println("ROWS "+rows);
         setSessionParams(request, nOfPages, currentPage, recordsPerPage);
 
     }

@@ -1,6 +1,5 @@
 package ua.polischuk.model.entity;
 
-import lombok.*;
 
 import java.io.Serializable;
 import java.util.HashSet;

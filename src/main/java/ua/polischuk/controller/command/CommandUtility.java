@@ -27,7 +27,7 @@ public class CommandUtility {
         if(loggedUsers.stream().anyMatch(userName::equals)){
             return true;
         }
-        System.out.println("COMMAND UT");
+
        /* loggedUsers.add(userName);
         request.getSession().getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);*/
@@ -38,8 +38,6 @@ public class CommandUtility {
         HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
 
-        System.out.println("delete userName " + userName);
-        System.out.println("COMMAND UT2");
         loggedUsers.remove(userName);
         request.getSession().getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);
@@ -49,7 +47,6 @@ public class CommandUtility {
     static void addUserToContext(HttpServletRequest request, String userName) {
         HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
-        System.out.println("COMMAND UT1");
         loggedUsers.add(userName);
         request.getServletContext()
                 .setAttribute("loggedUsers", loggedUsers);

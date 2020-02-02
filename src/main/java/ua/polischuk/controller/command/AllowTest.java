@@ -1,5 +1,6 @@
 package ua.polischuk.controller.command;
 
+import org.apache.log4j.Logger;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.service.TestService;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 public class AllowTest implements Command {
     private UserService userService;
     private TestService testService;
+    private static final Logger log = Logger.getLogger( AllowTest.class);
 
     public AllowTest(TestService testService, UserService userService) {
         this.userService = userService;
@@ -21,11 +23,11 @@ public class AllowTest implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+
         String email = request.getParameter("email");
         String testName = request.getParameter("testName");
 
-        User user;
-        Test test;
+
         try{
             userService.findByEmail(email);
             testService.findTestByName(testName); //can avoid?
@@ -38,8 +40,7 @@ public class AllowTest implements Command {
         try {
             userService.addTestToAvailable(email, testName);
         } catch (java.lang.Exception e) {
-            e.printStackTrace();
-            System.out.println("ERROR");
+            log.error("Exception in allow test while adding test ");
             request.getSession().setAttribute("unSuccessFullCreated", true);
             return "redirect:/admin/allow-test.jsp";
         }

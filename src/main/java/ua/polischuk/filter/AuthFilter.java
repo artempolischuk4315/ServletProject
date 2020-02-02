@@ -30,7 +30,7 @@ public class AuthFilter implements Filter {
             response.sendRedirect(request.getContextPath() + "/");
         }
         if (request.getRequestURI().contains("admin") && ((request.getSession().getAttribute("role").equals(User.ROLE.USER)))) {
-            System.out.println(request.getSession().getAttribute("role").equals(User.ROLE.USER));
+
             response.sendRedirect(request.getContextPath() + "/user/user-hello.jsp");
         }
         if (( request.getRequestURI().contains("index")||isOnIndexPage(request) || request.getRequestURI().contains("login") || request.getRequestURI().contains("registration")) &&
