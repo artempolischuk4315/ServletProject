@@ -26,7 +26,7 @@ public class TestService {
         if(test.isPresent()){
             log.info(LoggerInfo.OPERATION_SUCCESSFUL);
             return testRepository.findByName(name).get();
-        }else throw new Exception();
+        }else throw new Exception(); //TODO
 
 
     }
@@ -36,7 +36,7 @@ public class TestService {
         List<Test> tests = new ArrayList<>();
         try{
              tests = testRepository.findAll(offset, recPerPage);
-    }catch (Exception e){
+    }catch (Exception e){ //TODO
             log.error(LoggerInfo.ERROR_GETTING_ALL_TESTS);
         }
         log.info(LoggerInfo.OPERATION_SUCCESSFUL);

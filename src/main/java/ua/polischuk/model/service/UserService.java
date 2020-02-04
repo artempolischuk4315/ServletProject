@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
@@ -40,7 +41,7 @@ public class UserService {
         try {
             users = userRepository.findAll(page, recPerPage);
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();//TODO
         }
         return users;
     }
@@ -56,7 +57,7 @@ public class UserService {
             log.info(LoggerInfo.USER_IS_PRESENT);
             return userRepository.findByEmail(email).get();
         }
-       else throw new Exception();
+       else throw new Exception();//TODO
     }
 
 
@@ -68,7 +69,7 @@ public class UserService {
         try {
             encryptedPass = encryptor.EncryptPassword(password);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            e.printStackTrace();// TODO
         }
         User user = new User(fName, fNameUa, lName, lNameUa, email, encryptedPass, User.ROLE.USER);
         if (email.equals(ADMIN_MAIL)) {
@@ -80,7 +81,7 @@ public class UserService {
             saveNewUser(user);
         } catch (SQLException e) {
             log.info(LoggerInfo.ERROR_SAVING_USER +user.getEmail());
-            throw new RuntimeException();
+            throw new RuntimeException();//TODO
         }
         return false;
     }
@@ -111,7 +112,7 @@ public class UserService {
            userRepository.addTestToAvailable(email, testName);
        }catch (SQLException e){
            log.error(LoggerInfo.ERROR_ADD_TO_AVAILABLE);
-           throw new Exception();
+           throw new Exception();//TODO
        }
     }
 
@@ -128,11 +129,14 @@ public class UserService {
     }
 
     public Set<Test> getAvailableTestsByCategory(String email, String category){
+
+        log.info("Category " +Category.getCategoryByString(category));
         return getAvailableTests(email)
                 .stream()
                 .filter(test -> test.getCategory().toString().equals(category))
                 .filter(test -> test.isActive())
                 .collect(Collectors.toSet());
+
     }
 
 

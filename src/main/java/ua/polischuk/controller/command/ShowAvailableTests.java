@@ -21,6 +21,9 @@ public class ShowAvailableTests implements Command{
        String categoryChosenByUser = request.getParameter("category");
        Set<Test> testsByCategory = userService.getAvailableTestsByCategory(currentUserEmail, categoryChosenByUser);
        request.getSession().setAttribute("availableTests", testsByCategory);
+       if(testsByCategory.size()==0){
+           request.getSession().setAttribute("noTests", true);
+       }
        return "redirect:/user/available-tests-for-current-user.jsp";
     }
 

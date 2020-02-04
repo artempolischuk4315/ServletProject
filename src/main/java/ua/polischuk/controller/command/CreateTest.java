@@ -33,6 +33,7 @@ public class CreateTest implements Command {
         Test test = new Test(name, nameUa, category, difficulty, numberOfQuestions, timeLimit);
         Validator validator = new Validator();
         if(!validator.validateTest(name, nameUa, category, difficulty, numberOfQuestions, timeLimit)){
+            request.getSession().setAttribute("notCreatedTest", true);
             return "redirect:/admin/add-test.jsp";
         }
 
