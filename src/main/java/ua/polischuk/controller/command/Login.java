@@ -1,6 +1,7 @@
 package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
+import ua.polischuk.exception.NoSuchRecordInTableException;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.service.ServiceFactory;
 import ua.polischuk.model.service.UserService;
@@ -33,8 +34,8 @@ public class Login implements Command {
 
             try {
                 user = userService.findByEmail(email);
-            } catch (java.lang.Exception e) {
-                log.error("Error in login");
+            } catch (NoSuchRecordInTableException e) {
+                log.error("Error while logging");
                 return "redirect:/login.jsp";
             }
 

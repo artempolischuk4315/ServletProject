@@ -143,7 +143,7 @@ public class JDBCUserDao implements UserRepository {
           log.error(ERROR_FINDING_BY_EMAIL, e);
       }
 
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     @Override

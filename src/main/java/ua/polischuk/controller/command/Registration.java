@@ -1,5 +1,6 @@
 package ua.polischuk.controller.command;
 
+import ua.polischuk.exception.SavingUserException;
 import ua.polischuk.model.service.UserService;
 import ua.polischuk.utility.Validator;
 
@@ -38,7 +39,7 @@ public class Registration implements Command {
         try {
             userService.setUserParamsAndSave(firstName, firstNameUa, lastName, lastNameUa, email, password);
             request.getSession().setAttribute("successRegistr", true);
-        }catch (RuntimeException e){
+        }catch (SavingUserException e){
             request.getSession().setAttribute("userAlreadyExists", true);
             return "redirect:/registration.jsp";
         }

@@ -1,5 +1,6 @@
 package ua.polischuk.controller.command;
 
+import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.service.ServiceFactory;
@@ -40,7 +41,7 @@ public class CreateTest implements Command {
         try {
             testService.saveNewTest(test);
             request.getSession().setAttribute("createdTest", true);
-        } catch (java.lang.Exception e) {
+        } catch (SaveTestException e) {
             request.getSession().setAttribute("notCreatedTest", true);
             return "redirect:/admin/add-test.jsp";
         }

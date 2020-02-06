@@ -18,7 +18,7 @@ public class JDBCTestDao implements TestRepository {
     }
 
     @Override
-    public Optional<Test> findByName(String name) throws SQLException {
+    public Optional<Test> findByName(String name)  {
         TestMapper testMapper = new TestMapper();
 
         String q1 = "select * from test WHERE name = '" + name + "'";
@@ -30,9 +30,9 @@ public class JDBCTestDao implements TestRepository {
                 test = testMapper.extractFromResultSet(resultSet);
             }
         }catch (SQLException e){
-            throw new SQLException();
+           // throw new SQLException();
         }
-        return Optional.of(test);
+        return Optional.ofNullable(test);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class JDBCTestDao implements TestRepository {
     }
 
     @Override
-    public List<Test> findAll(int offset, int recordsPerPage) throws SQLException {
+    public List<Test> findAll(int offset, int recordsPerPage)  {
 
         Map<Integer, Test> tests = new HashMap<>();
         String sql = "SELECT * FROM test "+
@@ -99,6 +99,8 @@ public class JDBCTestDao implements TestRepository {
             e.printStackTrace();
             throw new SQLException(); //TODO
         }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return new ArrayList<>(tests.values());
     }

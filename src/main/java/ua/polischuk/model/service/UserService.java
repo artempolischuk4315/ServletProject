@@ -1,6 +1,10 @@
 package ua.polischuk.model.service;
 
 import org.apache.log4j.Logger;
+import ua.polischuk.exception.AddingTestToAvailableException;
+import ua.polischuk.exception.CompleteTestException;
+import ua.polischuk.exception.NoSuchRecordInTableException;
+import ua.polischuk.exception.SavingUserException;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
@@ -37,39 +41,33 @@ public class UserService {
 
     public List<User> getAllUsers(int page, int recPerPage) {
         log.info(LoggerInfo.GETTING_ALL_USERS);
-        List<User> users = new ArrayList<>();
-        try {
-            users = userRepository.findAll(page, recPerPage);
-        } catch (SQLException e) {
-            e.printStackTrace();//TODO
-        }
-        return users;
+        return userRepository.findAll(page, recPerPage);
     }
 
     public int getNoOfRecords() {
         return userRepository.getNoOfRecords();//считается в том же обращении, что и взятие всех юзеров
     }
 
-    public User findByEmail(String email) throws Exception {
+    public User findByEmail(String email) throws  NoSuchRecordInTableException {
        log.info(LoggerInfo.FINDING_BY_EMAIL);
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
             log.info(LoggerInfo.USER_IS_PRESENT);
-            return userRepository.findByEmail(email).get();
+            return user.get();
         }
-       else throw new Exception();//TODO
+       else throw new NoSuchRecordInTableException();
     }
 
 
     public boolean setUserParamsAndSave(String fName, String fNameUa, String lName,
-                                        String lNameUa, String email, String password) {
+                                        String lNameUa, String email, String password) throws SavingUserException {
 
         PasswordEncrypt encryptor = new PasswordEncrypt();
         String encryptedPass = null; //в отедльный метод
         try {
             encryptedPass = encryptor.EncryptPassword(password);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();// TODO
+            log.error(e);
         }
         User user = new User(fName, fNameUa, lName, lNameUa, email, encryptedPass, User.ROLE.USER);
         if (email.equals(ADMIN_MAIL)) {
@@ -81,7 +79,7 @@ public class UserService {
             saveNewUser(user);
         } catch (SQLException e) {
             log.info(LoggerInfo.ERROR_SAVING_USER +user.getEmail());
-            throw new RuntimeException();//TODO
+            throw new SavingUserException();
         }
         return false;
     }
@@ -106,13 +104,13 @@ public class UserService {
     }
 
 
-    public void addTestToAvailable(String email, String testName) throws Exception {
+    public void addTestToAvailable(String email, String testName) throws AddingTestToAvailableException {
 
        try {
            userRepository.addTestToAvailable(email, testName);
        }catch (SQLException e){
            log.error(LoggerInfo.ERROR_ADD_TO_AVAILABLE);
-           throw new Exception();//TODO
+           throw new AddingTestToAvailableException();
        }
     }
 
@@ -144,9 +142,13 @@ public class UserService {
         return (MIN + (int) (Math.random() * MAX));
     }
 
-    public void completeTest(String email, String testName, Integer result) throws Exception {
+    public void completeTest(String email, String testName, Integer result) throws CompleteTestException {
         log.info(LoggerInfo.COMPLETING_TEST);
-        userRepository.completeTest(email, result, testName);
+        try {
+            userRepository.completeTest(email, result, testName);
+        } catch (SQLException e) {
+            throw new CompleteTestException();
+        }
     }
 
     public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {

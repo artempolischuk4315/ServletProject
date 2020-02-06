@@ -1,5 +1,7 @@
 package ua.polischuk.controller.command;
 
+import ua.polischuk.exception.CompleteTestException;
+import ua.polischuk.exception.NoSuchRecordInTableException;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.service.UserService;
 
@@ -25,7 +27,7 @@ public class CompleteSelectedTest implements Command {
         try {
             userService.completeTest(email, nameOfTest, result);
             currentUser = userService.findByEmail(email);
-        } catch (java.lang.Exception e) {
+        } catch (NoSuchRecordInTableException | CompleteTestException e) {
             request.getSession().setAttribute("TestDeleted", true);
             return "redirect:/user/user-hello.jsp";
         }
