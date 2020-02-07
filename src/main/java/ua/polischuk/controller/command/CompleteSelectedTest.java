@@ -1,6 +1,7 @@
 package ua.polischuk.controller.command;
 
 import ua.polischuk.model.entity.User;
+import ua.polischuk.model.service.UserInteractionWithTestService;
 import ua.polischuk.model.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,8 +10,11 @@ public class CompleteSelectedTest implements Command {
 
     UserService userService;
 
-    public CompleteSelectedTest(UserService userService) {
+    UserInteractionWithTestService userTestService;
+
+    public CompleteSelectedTest(UserService userService, UserInteractionWithTestService userTestService) {
         this.userService = userService;
+        this.userTestService = userTestService;
     }
 
     @Override
@@ -22,11 +26,11 @@ public class CompleteSelectedTest implements Command {
 
         request.getSession().setAttribute("lastCompletedTest", nameOfTest);
 
-        Integer result = userService.setRandomResult(); //в сервис
+        Integer result = userTestService.setRandomResult(); //в сервис
 
         User currentUser;
 
-        boolean completing = userService.completeTest(email, nameOfTest, result);
+        boolean completing = userTestService.completeTest(email, nameOfTest, result);
 
         if(completing){
             currentUser = userService.findByEmail(email).get();
@@ -34,7 +38,7 @@ public class CompleteSelectedTest implements Command {
             request.getSession().setAttribute("TestDeleted", true);
             return "redirect:/user/user-hello.jsp";
         }
-        new ShowAvailableTests(userService).updateListOfTests(request);
+        new ShowAvailableTests(userTestService).updateListOfTests(request);
         request.getSession().setAttribute("resultOfLastCompletedTest", result);
         request.getSession().setAttribute("stats", currentUser.getStats());
         //обновляем список, чтобы при возвращении

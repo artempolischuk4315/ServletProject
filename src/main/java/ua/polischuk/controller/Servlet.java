@@ -2,11 +2,9 @@ package ua.polischuk.controller;
 
 import ua.polischuk.controller.command.*;
 import ua.polischuk.controller.command.Exception;
-import ua.polischuk.model.dao.DaoFactory;
-import ua.polischuk.model.dao.UserRepository;
-import ua.polischuk.model.dao.impl.JDBCUserDao;
 import ua.polischuk.model.service.ServiceFactory;
 import ua.polischuk.model.service.TestService;
+import ua.polischuk.model.service.UserInteractionWithTestService;
 import ua.polischuk.model.service.UserService;
 
 import javax.servlet.ServletConfig;
@@ -14,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,6 +23,7 @@ public class Servlet extends HttpServlet {
     private Map<String, Command> commands = new HashMap<>();
     UserService userService =  ServiceFactory.getInstance().getUserService();
     TestService testService =   ServiceFactory.getInstance().getTestService();
+    UserInteractionWithTestService userTestService = ServiceFactory.getInstance().getUserTestService();
 
     public void init(ServletConfig servletConfig){
 
@@ -40,14 +38,14 @@ public class Servlet extends HttpServlet {
         commands.put("allUsersMenu", new AllUsersMenu(userService));
         commands.put("createTest", new CreateTest(testService));
         commands.put("allTests", new ShowAllTests(testService));
-        commands.put("allowTest", new AllowTest(testService, userService));
-        commands.put("watchAvailableTestsForSelectedUser", new WatchAvailableTestsForSelectedUser(userService, testService));
+        commands.put("allowTest", new AllowTest(testService, userService, userTestService));
+        commands.put("watchAvailableTestsForSelectedUser", new WatchAvailableTestsForSelectedUser(userTestService));
         commands.put("disableTest", new DisableTest(testService));
         commands.put("enableTest", new EnableTest(testService));
-        commands.put("showAvailableTests", new ShowAvailableTests(userService));
-        commands.put("completeTest", new CompleteSelectedTest(userService));
+        commands.put("showAvailableTests", new ShowAvailableTests(userTestService));
+        commands.put("completeTest", new CompleteSelectedTest(userService, userTestService));
         commands.put("sendMail", new SendMail());
-        commands.put("watchCompletedTests", new WatchCompletedTest(userService));
+        commands.put("watchCompletedTests", new WatchCompletedTest(userTestService));
         commands.put("goOnAllowPage", new GoOnAllowPage(testService, userService));
     }
 

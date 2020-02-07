@@ -1,26 +1,19 @@
 package ua.polischuk.model.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.exception.AddingTestToAvailableException;
 import ua.polischuk.model.dao.DaoFactory;
-import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
-import ua.polischuk.model.entity.Category;
-import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
-import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 import static ua.polischuk.utility.Constants.ADMIN_MAIL;
 
 
 public class UserService {
     private UserRepository userRepository;
-    private TestRepository testRepository;
-    private final static int MAX = 100;
-    private final static int MIN = 1;
+
     private static final Logger log = Logger.getLogger( UserService.class);
 
     public UserService(UserRepository userRepository) {
@@ -29,7 +22,7 @@ public class UserService {
 
     public UserService() {
             this.userRepository = DaoFactory.getInstance().createUserDao();
-            this.testRepository = DaoFactory.getInstance().createTestDao();
+
     }
 
 
@@ -91,44 +84,4 @@ public class UserService {
 
     }
 
-    public void addTestToAvailable(String email, String testName) throws AddingTestToAvailableException {//TODO TEST
-
-       try {
-           userRepository.addTestToAvailable(email, testName);
-       }catch (SQLException e){
-           log.error(LoggerInfo.ERROR_ADD_TO_AVAILABLE);
-           throw new AddingTestToAvailableException();
-       }
-    }
-
-    public Set<Test> getAvailableTests(String email) {//TODO TEST
-        Set<Test> tests =  userRepository.getAvailableTestsSet(email);
-
-        return tests;
-    }
-
-    public Set<Test> getAvailableTestsByCategory(String email, String category){ //TODO TEST
-
-        log.info(Category.getCategoryByString(category));
-        return getAvailableTests(email)
-                .stream()
-                .filter(test -> test.getCategory().toString().equals(category))
-                .filter(test -> test.isActive())
-                .collect(Collectors.toSet());
-    }
-
-    public int setRandomResult() {
-        return (MIN + (int) (Math.random() * MAX));
-    }
-
-    public boolean completeTest(String email, String testName, Integer result)  {
-        log.info(LoggerInfo.COMPLETING_TEST);
-
-        return userRepository.completeTest(email, result, testName);
-    }
-
-    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException { //TODO ?
-        log.info(LoggerInfo.GET_COMPLETED_TESTS);
-        return userRepository.getCompletedTestsByEmail(email);
-    }
 }

@@ -1,6 +1,6 @@
 package ua.polischuk.controller.command;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.model.service.UserInteractionWithTestService;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,9 +8,9 @@ import java.util.List;
 
 public class WatchCompletedTest implements Command{
 
-    UserService userService;
-    public WatchCompletedTest(UserService userService) {
-        this.userService = userService;
+    UserInteractionWithTestService userTestService;
+    public WatchCompletedTest(UserInteractionWithTestService userTetsService) {
+        this.userTestService = userTetsService;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class WatchCompletedTest implements Command{
         List<Test> completedTests = new ArrayList<>();
 
         try {
-           completedTests = userService.getCompletedTestsByEmail(email);
+           completedTests = userTestService.getCompletedTestsByEmail(email);
         } catch (SQLException e) {
             return "redirect:/user/user-hello.jsp";
         }

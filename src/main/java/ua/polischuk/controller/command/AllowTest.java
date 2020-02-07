@@ -3,6 +3,7 @@ package ua.polischuk.controller.command;
 import org.apache.log4j.Logger;
 import ua.polischuk.exception.AddingTestToAvailableException;
 import ua.polischuk.model.service.TestService;
+import ua.polischuk.model.service.UserInteractionWithTestService;
 import ua.polischuk.model.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,11 +15,14 @@ public class AllowTest implements Command {
 
     private TestService testService;
 
+    private UserInteractionWithTestService userTestService;
+
     private static final Logger log = Logger.getLogger( AllowTest.class);
 
-    public AllowTest(TestService testService, UserService userService) {
+    public AllowTest(TestService testService, UserService userService, UserInteractionWithTestService userTestService) {
         this.userService = userService;
         this.testService = testService;
+        this.userTestService = userTestService;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class AllowTest implements Command {
         }
 
         try {
-            userService.addTestToAvailable(email, testName);
+            userTestService.addTestToAvailable(email, testName);
         } catch (AddingTestToAvailableException e) {
             log.error("Exception in allow test while adding test ");
             request.getSession().setAttribute("unSuccessFullCreated", true);

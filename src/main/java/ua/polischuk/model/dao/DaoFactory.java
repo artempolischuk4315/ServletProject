@@ -9,7 +9,8 @@ public abstract class DaoFactory {
 
     public abstract UserRepository createUserDao();
     public abstract TestRepository createTestDao();
-    //public abstract TestDao createStudentDao();
+    public abstract UserTestRepository createUserAndTestDao();
+
 
     public static DaoFactory getInstance(){
         if( daoFactory == null ){

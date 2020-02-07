@@ -24,5 +24,6 @@ public class ServiceFactory {
     public TestService getTestService() {
         return new TestService();
     }
+    public UserInteractionWithTestService getUserTestService(){ return new UserInteractionWithTestService(); }
 
 }

@@ -4,16 +4,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.polischuk.exception.AddingTestToAvailableException;
 import ua.polischuk.model.dao.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.service.UserService;
-
-import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -87,7 +83,7 @@ public class UserServiceTest {
     }
 
 
-    @Test
+   /* @Test
     public void shouldReturnTrueWhenCompletingTestWasSuccessful()  {
         when(userRepository.completeTest(anyString(), anyInt(), anyString())).thenReturn(Boolean.TRUE);
 
@@ -103,6 +99,6 @@ public class UserServiceTest {
         boolean result = instance.completeTest(USER_EMAIL, INVALID_TEST_NAME, test.getResult());
 
         assertThat(result).isFalse();
-    }
+    }*/
 
 }
