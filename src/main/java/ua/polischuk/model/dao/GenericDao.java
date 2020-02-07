@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface GenericDao<T> extends AutoCloseable {
-    void save(T entity) throws SQLException;
+    boolean save(T entity) ;
     T findById(int id);
     List<T> findAll(int offset, int recPerPage);
     void update(T entity);

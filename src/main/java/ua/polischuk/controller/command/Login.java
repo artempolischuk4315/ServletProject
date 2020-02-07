@@ -1,16 +1,11 @@
 package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.exception.NoSuchRecordInTableException;
 import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.ServiceFactory;
 import ua.polischuk.model.service.UserService;
 import ua.polischuk.utility.PasswordEncrypt;
-import ua.polischuk.utility.PasswordValidator;
-import ua.polischuk.utility.Validator;
-
 import javax.servlet.http.HttpServletRequest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 
 public class Login implements Command {
@@ -23,7 +18,7 @@ public class Login implements Command {
     }
         @Override
         public String execute (HttpServletRequest request){
-            User user;
+            User user = null;
             String email = request.getParameter("email");
             String pass = request.getParameter("pass");
             String encryptedPass = getEncryptedPassword(pass);
@@ -32,25 +27,28 @@ public class Login implements Command {
 
             if (CommandUtility.checkUserIsLogged(request, email)) return "redirect:/index.jsp";
 
-            try {
-                user = userService.findByEmail(email);
-            } catch (NoSuchRecordInTableException e) {
+            Optional<User> userOptional = userService.findByEmail(email);
+            if(!userOptional.isPresent()){
+
                 log.error("Error while logging");
                 return "redirect:/login.jsp";
             }
-
-
-            if (user.getEmail().equals(ADMIN_MAIL) && user.getPassword().equals(encryptedPass)) {
-                setAllParams(request, user, User.ROLE.ADMIN, email);
-                return "redirect:/admin/admin-hello.jsp";
-            } else if (user.getEmail().equals(email) && user.getPassword().equals(encryptedPass)) {
-                setAllParams(request, user, User.ROLE.USER, email);
-                return "redirect:/user/user-hello.jsp";
-            } else {
-                return "/login.jsp";//todo  error
-            }
+            user = userOptional.get();
+            return redirectByRoleIfPAsswordCorrect(request, user, email, encryptedPass);
 
         }
+
+    private String redirectByRoleIfPAsswordCorrect(HttpServletRequest request, User user, String email, String encryptedPass) {
+        if (user.getEmail().equals(ADMIN_MAIL) && user.getPassword().equals(encryptedPass)) {
+            setAllParams(request, user, User.ROLE.ADMIN, email);
+            return "redirect:/admin/admin-hello.jsp";
+        } else if (user.getEmail().equals(email) && user.getPassword().equals(encryptedPass)) {
+            setAllParams(request, user, User.ROLE.USER, email);
+            return "redirect:/user/user-hello.jsp";
+        } else {
+            return "/login.jsp";//todo  error
+        }
+    }
 
     private void setAllParams(HttpServletRequest request, User user, User.ROLE role, String email) {
         CommandUtility.setUserRole(request, role, email);
@@ -71,11 +69,7 @@ public class Login implements Command {
         PasswordEncrypt encryptor = new PasswordEncrypt();
         String encryptedPass = null;
 
-        try {
-            encryptedPass = encryptor.EncryptPassword(pass);
-        } catch (NoSuchAlgorithmException e) {
-           log.error("Error encrypting password");
-        }
+        encryptedPass = encryptor.EncryptPassword(pass);
         return encryptedPass;
     }
 
@@ -85,7 +79,6 @@ public class Login implements Command {
             req.getSession().setAttribute("role", user.getRole());
             req.getSession().setAttribute("email", user.getEmail());
             req.getSession().setAttribute("stats", user.getStats());
-
         }
 
 

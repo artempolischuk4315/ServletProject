@@ -43,7 +43,7 @@ public class JDBCUserDao implements UserRepository {
 
 
     @Override
-    public void save(User entity) throws SQLException {
+    public boolean save(User entity)  {
 
         String sql = SQLQwertys.ADD_NEW_USER;
         try (Connection connection = connectionPoolHolder.getConnection() ) {
@@ -56,11 +56,13 @@ public class JDBCUserDao implements UserRepository {
             preparedStatement.setString(5, entity.getEmail());
             preparedStatement.setString(6, entity.getPassword());
             preparedStatement.setString(7, String.valueOf(entity.getRole()));
-            preparedStatement.executeUpdate();
+            int result = preparedStatement.executeUpdate();
+
+            return result ==1;
 
         } catch (SQLException e) {
             log.error(ERROR_WHILE_SAVING_USER, e);
-           throw new SQLException();
+            return false;
         }
 
     }
@@ -167,7 +169,7 @@ public class JDBCUserDao implements UserRepository {
     }
 
     @Override
-    public void completeTest(String email, Integer result, String testName) throws SQLException {
+    public boolean completeTest(String email, Integer result, String testName)  {
 
         try(Connection connection = connectionPoolHolder.getConnection() ) {
             try {
@@ -186,14 +188,17 @@ public class JDBCUserDao implements UserRepository {
                 HashMap<Integer, Integer> completedTestsAndResults = (HashMap<Integer, Integer>)
                         getSetOfCompletedTestsByUserId(statement, userId);
                 updateUserStats(statement, recountSuccess(completedTestsAndResults), userId);
-
                 connection.commit();
                 connection.setAutoCommit(true);
+                return true;
             } catch (SQLException e) {
                 log.error(ERROR_WHILE_COMPLETING_TEST, e);
                 connection.rollback();
-                throw new SQLException();
+                return false;
             }
+        } catch (SQLException ex) {
+            log.error(ex);
+            return false;
         }
     }
 
@@ -243,16 +248,12 @@ public class JDBCUserDao implements UserRepository {
         String getCompletedTests = "select test_id, result from completed_tests  WHERE user_id =" + " '" + userId + "'";
         Map<Integer, Integer> completedTestsIdWithResults = new HashMap<>();
 
-        //try {
             ResultSet  resultSet = statement.executeQuery(getCompletedTests);
             while (resultSet.next()){
                 completedTestsIdWithResults.put(resultSet.getInt(1), resultSet.getInt(2));
             }
             resultSet.close();
-        /*} catch (SQLException e) {
-            log.error(CANT_GET_SET_OF_COMPLETED_TESTS_BY_ID, e);//C
-            throw new SQLException();
-        }*/
+
         return completedTestsIdWithResults;
     }
 
@@ -303,9 +304,9 @@ public class JDBCUserDao implements UserRepository {
             } catch (SQLException e) {
                 log.error(CANT_GET_COMPLETED_TESTS_BY_EMAIL, e);
                 connection.rollback();
-                //throw new SQLException(); //C Проверка в сервисе на null?
             }
         }
+
         return completedTests;
 
     }
@@ -338,13 +339,14 @@ public class JDBCUserDao implements UserRepository {
         Integer id = null;
         String selectTestIdFromAvailable = "select test_id from available_tests where user_id ="+userId + " and test_id = "+testId ;
         ResultSet resultSet = statement.executeQuery(selectTestIdFromAvailable);
+
         if (resultSet.next()) {
             id = resultSet.getInt(1);
         }
 
         if(id == null){
             log.info(NO_SUCH_TEST_IN_AVAILABLE);
-            throw new SQLException(); // own exception?
+            throw new SQLException();
         } //проверяем, не прошли ли тест в другом окне пока это ждало
         resultSet.close();
 
@@ -353,7 +355,7 @@ public class JDBCUserDao implements UserRepository {
             statement.executeUpdate(dropTestFromAvailable);
         }catch (SQLException e){
             log.error(ERROR_DROPPING_FROM_AVAILABLE, e);
-          //  throw new SQLException();// ?
+            throw new SQLException();
         }
     }
 
@@ -361,21 +363,17 @@ public class JDBCUserDao implements UserRepository {
         int id = 0;
         String findCurrentUserId ="select id from "+tableName+" WHERE "+ fieldName +" ='"+key+"'";
 
-        //try {
             ResultSet resultSet = statement.executeQuery(findCurrentUserId);
             if (resultSet.next()) {
                 id = resultSet.getInt(1);
             }
             resultSet.close();
-     /*   }catch (SQLException e){
-            log.error("Cant find by field", e);
-            throw new SQLException();
-        }*/
+
         return id;
     }
 
     @Override
-    public Set<Test> getAvailableTestsSet(String email) throws SQLException {
+    public Set<Test> getAvailableTestsSet(String email)  {
         Set<Test> tests = new HashSet<>();
         TestMapper testMapper = new TestMapper();
         String sql =

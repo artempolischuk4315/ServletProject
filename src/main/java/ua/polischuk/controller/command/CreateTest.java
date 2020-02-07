@@ -3,12 +3,9 @@ package ua.polischuk.controller.command;
 import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.ServiceFactory;
 import ua.polischuk.model.service.TestService;
 import ua.polischuk.utility.Validator;
-
 import javax.servlet.http.HttpServletRequest;
-
 import static ua.polischuk.utility.Constants.*;
 
 
@@ -45,7 +42,6 @@ public class CreateTest implements Command {
             request.getSession().setAttribute("notCreatedTest", true);
             return "redirect:/admin/add-test.jsp";
         }
-
         return "redirect:/admin/admin-hello.jsp";
     }
 }

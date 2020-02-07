@@ -1,15 +1,11 @@
 package ua.polischuk.model.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.exception.NoSuchRecordInTableException;
 import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
-import ua.polischuk.model.dao.UserRepository;
 import ua.polischuk.model.entity.Test;
-
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,14 +18,10 @@ public class TestService {
             this.testRepository = DaoFactory.getInstance().createTestDao();
     }
 
-    public Test findTestByName(String name) throws NoSuchRecordInTableException {
+    public Optional<Test> findTestByName(String name)  {
         log.info(LoggerInfo.FINDING_BY_NAME);
-        Optional<Test> test = testRepository.findByName(name);
-        if(test.isPresent()){
-            log.info(LoggerInfo.OPERATION_SUCCESSFUL);
-            return testRepository.findByName(name).get();
-        }else throw new NoSuchRecordInTableException(); //TODO
 
+        return testRepository.findByName(name);
 
     }
 
@@ -44,9 +36,8 @@ public class TestService {
     public void saveNewTest (Test test) throws SaveTestException {
         log.info(LoggerInfo.SAVING_TEST);
         test.setActive(true);
-        try {
-            testRepository.save(test);
-        }catch (SQLException e){
+        boolean result = testRepository.save(test);
+        if(!result){
             throw new SaveTestException();
         }
     }

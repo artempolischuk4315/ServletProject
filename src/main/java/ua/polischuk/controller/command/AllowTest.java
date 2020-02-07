@@ -2,7 +2,6 @@ package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.exception.AddingTestToAvailableException;
-import ua.polischuk.exception.NoSuchRecordInTableException;
 import ua.polischuk.model.service.TestService;
 import ua.polischuk.model.service.UserService;
 import javax.servlet.http.HttpServletRequest;
@@ -29,11 +28,10 @@ public class AllowTest implements Command {
         String testName = request.getParameter("testName");
 
 
-        try{
-            userService.findByEmail(email);
-            testService.findTestByName(testName); //can avoid?
+        if( userService.findByEmail(email).isPresent()&& testService.findTestByName(testName).isPresent()) {
             request.getSession().setAttribute("addedTestToAvailable", true);
-        }catch (NoSuchRecordInTableException e){
+        }
+        else {
             request.getSession().setAttribute("noSuchTestOrUser", true);
             return "redirect:/admin/allow-test.jsp";
         }

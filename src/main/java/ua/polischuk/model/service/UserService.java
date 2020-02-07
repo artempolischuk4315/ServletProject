@@ -2,9 +2,6 @@ package ua.polischuk.model.service;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.exception.AddingTestToAvailableException;
-import ua.polischuk.exception.CompleteTestException;
-import ua.polischuk.exception.NoSuchRecordInTableException;
-import ua.polischuk.exception.SavingUserException;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
@@ -12,9 +9,6 @@ import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
-
-
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,7 +33,7 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers(int page, int recPerPage) {
+    public List<User> getAllUsers(int page, int recPerPage) { //TODO TEST
         log.info(LoggerInfo.GETTING_ALL_USERS);
         return userRepository.findAll(page, recPerPage);
     }
@@ -48,46 +42,40 @@ public class UserService {
         return userRepository.getNoOfRecords();//считается в том же обращении, что и взятие всех юзеров
     }
 
-    public User findByEmail(String email) throws  NoSuchRecordInTableException {
+    public Optional<User> findByEmail(String email) {
        log.info(LoggerInfo.FINDING_BY_EMAIL);
-        Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
-            log.info(LoggerInfo.USER_IS_PRESENT);
-            return user.get();
-        }
-       else throw new NoSuchRecordInTableException();
+        return userRepository.findByEmail(email);
+
     }
 
 
     public boolean setUserParamsAndSave(String fName, String fNameUa, String lName,
-                                        String lNameUa, String email, String password) throws SavingUserException {
+                                        String lNameUa, String email, String password)  {
 
-        PasswordEncrypt encryptor = new PasswordEncrypt();
-        String encryptedPass = null; //в отедльный метод
-        try {
-            encryptedPass = encryptor.EncryptPassword(password);
-        } catch (NoSuchAlgorithmException e) {
-            log.error(e);
-        }
+        String encryptedPass = PasswordEncrypt.EncryptPassword(password);//changed
+
         User user = new User(fName, fNameUa, lName, lNameUa, email, encryptedPass, User.ROLE.USER);
+
         if (email.equals(ADMIN_MAIL)) {
             user.setRole(User.ROLE.ADMIN);
         }
 
         setRegistersOfNewUser(user);
-        try {
-            saveNewUser(user);
-        } catch (SQLException e) {
-            log.info(LoggerInfo.ERROR_SAVING_USER +user.getEmail());
-            throw new SavingUserException();
+
+        if(saveNewUser(user).isPresent()){
+            return true;
         }
+
         return false;
+
     }
 
-    public void saveNewUser(User user) throws SQLException {
-        setRegistersOfNewUser(user);
-        userRepository.save(user);
+    public Optional<User> saveNewUser(User user)  {
 
+        boolean result = userRepository.save(user);
+        return result ?
+                Optional.of(user)
+                : Optional.empty();
     }
 
     private void setRegistersOfNewUser(User user) {
@@ -103,8 +91,7 @@ public class UserService {
 
     }
 
-
-    public void addTestToAvailable(String email, String testName) throws AddingTestToAvailableException {
+    public void addTestToAvailable(String email, String testName) throws AddingTestToAvailableException {//TODO TEST
 
        try {
            userRepository.addTestToAvailable(email, testName);
@@ -114,46 +101,34 @@ public class UserService {
        }
     }
 
+    public Set<Test> getAvailableTests(String email) {//TODO TEST
+        Set<Test> tests =  userRepository.getAvailableTestsSet(email);
 
-    public Set<Test> getAvailableTests(String email) {
-        Set<Test> tests = new HashSet<>();
-
-        try {
-            tests = userRepository.getAvailableTestsSet(email);
-        } catch (SQLException e) {
-            log.error(LoggerInfo.ERROR_GETTING_AVAILABLE_TESTS);
-        }
         return tests;
     }
 
-    public Set<Test> getAvailableTestsByCategory(String email, String category){
+    public Set<Test> getAvailableTestsByCategory(String email, String category){ //TODO TEST
 
-        log.info("Category " +Category.getCategoryByString(category));
+        log.info(Category.getCategoryByString(category));
         return getAvailableTests(email)
                 .stream()
                 .filter(test -> test.getCategory().toString().equals(category))
                 .filter(test -> test.isActive())
                 .collect(Collectors.toSet());
-
     }
-
 
     public int setRandomResult() {
         return (MIN + (int) (Math.random() * MAX));
     }
 
-    public void completeTest(String email, String testName, Integer result) throws CompleteTestException {
+    public boolean completeTest(String email, String testName, Integer result)  {
         log.info(LoggerInfo.COMPLETING_TEST);
-        try {
-            userRepository.completeTest(email, result, testName);
-        } catch (SQLException e) {
-            throw new CompleteTestException();
-        }
+
+        return userRepository.completeTest(email, result, testName);
     }
 
-    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
+    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException { //TODO ?
         log.info(LoggerInfo.GET_COMPLETED_TESTS);
         return userRepository.getCompletedTestsByEmail(email);
     }
-
 }

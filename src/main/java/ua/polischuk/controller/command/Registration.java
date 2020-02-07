@@ -1,13 +1,12 @@
 package ua.polischuk.controller.command;
 
-import ua.polischuk.exception.SavingUserException;
+
 import ua.polischuk.model.service.UserService;
 import ua.polischuk.utility.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
+
 
 import static ua.polischuk.utility.Constants.*;
 
@@ -36,14 +35,15 @@ public class Registration implements Command {
             return "redirect:/registration.jsp";
         }
 
-        try {
-            userService.setUserParamsAndSave(firstName, firstNameUa, lastName, lastNameUa, email, password);
+        if( userService.setUserParamsAndSave(firstName, firstNameUa, lastName, lastNameUa, email, password)) {
             request.getSession().setAttribute("successRegistr", true);
-        }catch (SavingUserException e){
+            return "redirect:/login.jsp";
+        }
+
             request.getSession().setAttribute("userAlreadyExists", true);
             return "redirect:/registration.jsp";
-        }
-        return "redirect:/login.jsp";
+
+
 
     }
 }

@@ -37,9 +37,6 @@ public class PrinterPreparerWithPagination {
 
 
 
-
-
-
     public void setCurrentPage(HttpServletRequest request) {
         String currentPageStr = request.getParameter("currentPage");
         if (currentPageStr != null) {

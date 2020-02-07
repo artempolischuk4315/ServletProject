@@ -42,7 +42,7 @@ public class JDBCTestDao implements TestRepository {
 
 
     @Override
-    public void save(Test entity) throws SQLException {
+    public boolean save(Test entity)  {
 
         String sql = SQLQwertys.ADD_NEW_TEST;
         try (Connection connection = connectionPoolHolder.getConnection()) {
@@ -54,10 +54,11 @@ public class JDBCTestDao implements TestRepository {
             preparedStatement.setInt(5, entity.getNumberOfQuestions());
             preparedStatement.setInt(6, entity.getTimeLimit());
             preparedStatement.setBoolean(7, entity.isActive());
-            preparedStatement.executeUpdate();
+            int result = preparedStatement.executeUpdate();
 
+            return result ==1;
         } catch (SQLException e) {
-            throw new SQLException();
+            return false;
         }
 
     }
