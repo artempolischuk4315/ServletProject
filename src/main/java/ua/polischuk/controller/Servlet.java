@@ -47,6 +47,7 @@ public class Servlet extends HttpServlet {
         commands.put("sendMail", new SendMail());
         commands.put("watchCompletedTests", new WatchCompletedTest(userTestService));
         commands.put("goOnAllowPage", new GoOnAllowPage(testService, userService));
+        commands.put("goOnMain", new GoOnMainPage());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

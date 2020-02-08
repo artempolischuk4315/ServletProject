@@ -26,7 +26,7 @@
 <body>
 <h1 <fmt:message key="label.test.over" /> </h1>
 <h1 <fmt:message key="label.onMain" /> </h1>
-<form method="post" action="${pageContext.request.contextPath}/user/user-hello.jsp" >
+<form method="post" action="${pageContext.request.contextPath}/goOnMain" >
     <div class="button" >
         <input type="submit" class="btn btn-secondary btn-lg " <fmt:message key="label.test.over" /> >
     </div>
