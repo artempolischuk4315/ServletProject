@@ -1,7 +1,7 @@
 package ua.polischuk.controller.command;
 
 
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.UserService;
 import ua.polischuk.utility.Validator;
 
 import javax.servlet.http.HttpServletRequest;

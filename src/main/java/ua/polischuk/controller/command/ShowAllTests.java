@@ -1,6 +1,6 @@
 package ua.polischuk.controller.command;
 
-import ua.polischuk.model.service.TestService;
+import ua.polischuk.service.TestService;
 import ua.polischuk.utility.PrinterPreparerWithPagination;
 
 import javax.servlet.http.HttpServletRequest;

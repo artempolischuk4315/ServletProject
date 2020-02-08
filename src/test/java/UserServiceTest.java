@@ -1,3 +1,4 @@
+import org.assertj.core.api.OffsetDateTimeAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,7 +7,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import ua.polischuk.model.dao.UserRepository;
 import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.UserService;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -21,6 +25,8 @@ public class UserServiceTest {
     private static final String TEST_NAME = "test";
     private static final String INVALID_TEST_NAME = "invalid test";
     private static final Integer TEST_RESULT = 100;
+    private static final int OFFSET = 1;
+    private static final int REC_PER_PAGE =5;
 
     @InjectMocks
     private UserService instance;
@@ -35,6 +41,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
+        when(userRepository.findAll(OFFSET, REC_PER_PAGE)).thenReturn(Collections.singletonList(user));
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
         when(userRepository.findByEmail(INVALID_EMAIL)).thenReturn(Optional.empty());
         when(user.getEmail()).thenReturn(USER_EMAIL);
@@ -78,10 +85,29 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldReturnOkWhenAddingTestToAvailableWasSuccessful()  {
+    public void shouldReturnTrueForGlobalSave(){
+        when(userRepository.save(any(User.class))).thenReturn(Boolean.TRUE);
+        boolean result =  instance.setUserParamsAndSave("name", "name",
+                "name", "name", "fffy@fff","pass");
 
+         assertThat(result).isEqualTo(true);
     }
 
+    @Test
+    public void shouldReturnFalseForGlobalSave(){
+        when(userRepository.save(any(User.class))).thenReturn(Boolean.FALSE);
+        boolean result =  instance.setUserParamsAndSave("name", "name",
+                "name", "name", "fffy@fff","pass");
+
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void shouldReturnAllUsersList(){
+        when(userRepository.findAll(OFFSET, REC_PER_PAGE)).thenReturn(Collections.singletonList(user));
+        List<User> users =instance.getAllUsers(OFFSET, REC_PER_PAGE);
+        assertThat(users).isEqualTo(Collections.singletonList(user));
+    }
 
    /* @Test
     public void shouldReturnTrueWhenCompletingTestWasSuccessful()  {

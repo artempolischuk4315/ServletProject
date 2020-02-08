@@ -131,7 +131,7 @@ public class JDBCTestDao implements TestRepository {
     }
 
     @Override
-    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+    public boolean enableOrDisableTest(String nameOfTest, boolean active)  {
 
         String updateTest=
                         "   UPDATE test " +
@@ -139,13 +139,11 @@ public class JDBCTestDao implements TestRepository {
                         "   WHERE name = '"+ nameOfTest+"'";
         try (Connection connection = connectionPoolHolder.getConnection()){
             Statement statement = connection.createStatement();
-            // statement.executeQuery(dropTestFromAvailable);
             statement.executeUpdate(updateTest);
+            return true;
         }catch (SQLException e){
-            e.printStackTrace();
-            throw new SQLException(); //TODO
+            return false;
         }
-
     }
 
     @Override

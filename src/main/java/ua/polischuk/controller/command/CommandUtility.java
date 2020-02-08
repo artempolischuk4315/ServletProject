@@ -9,16 +9,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
 public class CommandUtility {
-    static void setUserRole(HttpServletRequest request,
-                            User.ROLE role, String email) {
-        HttpSession session = request.getSession();
-        ServletContext context = request.getServletContext();
-        context.setAttribute("email", email);
-        session.setAttribute("role", role);
-        session.setAttribute("email", email);
-    }
 
-    static boolean checkUserIsLogged(HttpServletRequest request, String userName){
+    public static boolean checkUserIsLogged(HttpServletRequest request, String userName){
 
         HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");

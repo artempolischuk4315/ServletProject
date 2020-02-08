@@ -1,10 +1,9 @@
 package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.exception.AddingTestToAvailableException;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserInteractionWithTestService;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.TestService;
+import ua.polischuk.service.UserInteractionWithTestService;
+import ua.polischuk.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -32,17 +31,14 @@ public class AllowTest implements Command {
         String testName = request.getParameter("testName");
 
 
-        if( userService.findByEmail(email).isPresent()&& testService.findTestByName(testName).isPresent()) {
-            request.getSession().setAttribute("addedTestToAvailable", true);
-        }
-        else {
+        if( !userService.findByEmail(email).isPresent()|| !testService.findTestByName(testName).isPresent()) {
             request.getSession().setAttribute("noSuchTestOrUser", true);
             return "redirect:/admin/allow-test.jsp";
         }
 
-        try {
-            userTestService.addTestToAvailable(email, testName);
-        } catch (AddingTestToAvailableException e) {
+        if(userTestService.addTestToAvailable(email, testName)) {
+            request.getSession().setAttribute("addedTestToAvailable", true);
+        } else  {
             log.error("Exception in allow test while adding test ");
             request.getSession().setAttribute("unSuccessFullCreated", true);
             return "redirect:/admin/allow-test.jsp";

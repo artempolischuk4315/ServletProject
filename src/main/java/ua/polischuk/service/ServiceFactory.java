@@ -1,4 +1,4 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 public class ServiceFactory {
 

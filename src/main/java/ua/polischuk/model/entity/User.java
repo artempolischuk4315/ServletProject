@@ -18,26 +18,7 @@ public class User implements Serializable {
     private ROLE role;
     private double stats;
 
-    private Set<Test> availableTests;
-    private Map<Test, Integer> resultsOfTests;
 
-
-
-    public Map<Test, Integer> getResultsOfTests() {
-        return resultsOfTests;
-    }
-
-    public void setResultsOfTests(Map<Test, Integer> resultsOfTests) {
-        this.resultsOfTests = resultsOfTests;
-    }
-
-    public Set<Test> getAvailableTests() {
-        return availableTests;
-    }
-
-    public void setAvailableTests(HashSet<Test> availableTests) {
-        this.availableTests = availableTests;
-    }
 
     public double getStats() {
         return stats;
@@ -48,7 +29,7 @@ public class User implements Serializable {
     }
 
     public enum ROLE {
-        USER, ADMIN, UNKNOWN
+        USER, ADMIN
     }
 
     public User(String firstName, String firstNameUa, String lastName, String lastNameUa, String email, String password, ROLE role) {

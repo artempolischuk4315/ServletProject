@@ -1,4 +1,4 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 public interface LoggerInfo {
      String ERROR_ADD_TO_AVAILABLE = "Error while adding test in available: ";

@@ -3,7 +3,7 @@ package ua.polischuk.controller.command;
 import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.TestService;
+import ua.polischuk.service.TestService;
 import ua.polischuk.utility.Validator;
 import javax.servlet.http.HttpServletRequest;
 import static ua.polischuk.utility.Constants.*;
@@ -35,10 +35,9 @@ public class CreateTest implements Command {
             return "redirect:/admin/add-test.jsp";
         }
 
-        try {
-            testService.saveNewTest(test);
+        if(testService.saveNewTest(test).isPresent()) {
             request.getSession().setAttribute("createdTest", true);
-        } catch (SaveTestException e) {
+        } else {
             request.getSession().setAttribute("notCreatedTest", true);
             return "redirect:/admin/add-test.jsp";
         }

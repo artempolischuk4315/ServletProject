@@ -1,4 +1,4 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.exception.SaveTestException;
@@ -22,7 +22,6 @@ public class TestService {
         log.info(LoggerInfo.FINDING_BY_NAME);
 
         return testRepository.findByName(name);
-
     }
 
     public List<Test> findAll(int offset, int recPerPage)  {
@@ -33,19 +32,22 @@ public class TestService {
         return testRepository.getNoOfRecords();//считается в том же обращении, что и взятие всех юзеров
     }
 
-    public void saveNewTest (Test test) throws SaveTestException {
+    public Optional<Test> saveNewTest (Test test)  {
         log.info(LoggerInfo.SAVING_TEST);
+
         test.setActive(true);
+
         boolean result = testRepository.save(test);
-        if(!result){
-            throw new SaveTestException();
-        }
+
+        return result ?
+                Optional.of(test)
+                : Optional.empty();
     }
 
 
-    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+    public boolean enableOrDisableTest(String nameOfTest, boolean active)  {
         log.info(LoggerInfo.ENABLE_OR_DISABLE_TEST);
-        testRepository.enableOrDisableTest(nameOfTest, active);
+        return testRepository.enableOrDisableTest(nameOfTest, active);
     }
 
 

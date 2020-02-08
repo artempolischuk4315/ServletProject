@@ -2,7 +2,7 @@ package ua.polischuk.controller.command;
 
 
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.UserInteractionWithTestService;
+import ua.polischuk.service.UserInteractionWithTestService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
@@ -32,7 +32,5 @@ public class ShowAvailableTests implements Command{
         Set<Test> testsByCategory = userTestService.getAvailableTestsByCategory(currentUserEmail, categoryChosenByUser);
         request.getSession().setAttribute("availableTests", testsByCategory);
     }
-
-
 
 }

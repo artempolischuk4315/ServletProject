@@ -1,4 +1,4 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.DaoFactory;
@@ -22,7 +22,6 @@ public class UserService {
 
     public UserService() {
             this.userRepository = DaoFactory.getInstance().createUserDao();
-
     }
 
 

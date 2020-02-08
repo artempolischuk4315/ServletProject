@@ -1,7 +1,7 @@
 package ua.polischuk.controller.command;
 
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.UserInteractionWithTestService;
+import ua.polischuk.service.UserInteractionWithTestService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 

@@ -2,10 +2,10 @@ package ua.polischuk.controller;
 
 import ua.polischuk.controller.command.*;
 import ua.polischuk.controller.command.Exception;
-import ua.polischuk.model.service.ServiceFactory;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserInteractionWithTestService;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.ServiceFactory;
+import ua.polischuk.service.TestService;
+import ua.polischuk.service.UserInteractionWithTestService;
+import ua.polischuk.service.UserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
