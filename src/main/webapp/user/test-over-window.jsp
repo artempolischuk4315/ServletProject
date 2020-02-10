@@ -7,10 +7,14 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 
-<a href="${pageContext.request.contextPath}/logout"><fmt:message key="label.onMain" /></a>
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
-    <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+
+    <li><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+
+    <li><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+
+    <li><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
+
 </ul>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,19 +26,27 @@
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <!--<link rel="stylesheet" type="text/css" href="style.css" />-->
 
+
 </head>
+
+<style>
+    body{
+        background: url("https://images.pexels.com/photos/317356/pexels-photo-317356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    }
+</style>
 <body>
-<h1 <fmt:message key="label.test.over" /> </h1>
-<h1 <fmt:message key="label.onMain" /> </h1>
+
 <form method="post" action="${pageContext.request.contextPath}/goOnMain" >
-    <div class="button" >
-        <input type="submit" class="btn btn-secondary btn-lg " <fmt:message key="label.test.over" /> >
-    </div>
+    <fmt:message key="label.onMain" var="m"/>
+        <input style="width: 400px" value="${m}" type="submit" class="btn btn-secondary btn-lg " >
 </form>
+
 <form action="${pageContext.request.contextPath}/sendMail"  method="post" >
-    <div class="button" >
-        <input type="submit" class="btn btn-secondary btn-lg " <fmt:message key="label.getResult" /> onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();" >
-    </div>
+    <fmt:message key="label.getResult" var="m1" />
+        <input style="width: 400px" value="${m1}" type="submit" class="btn btn-secondary btn-lg " onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();">
+
 </form>
+
+
 </body>
 </html>
