@@ -10,7 +10,14 @@
 <html>
 <head>
 
-
+    <c:if test = "${sessionScope.DisablingError==true}">
+        <label class="alert alert-info" ><fmt:message key="alert.DisablingError"/></label>
+    </c:if>
+    <c:remove var="DisablingError" scope="session"/>
+    <c:if test = "${sessionScope.EnablingError==true}">
+        <label class="alert alert-info" ><fmt:message key="alert.EnablingError"/></label>
+    </c:if>
+    <c:remove var="EnablingError" scope="session"/>
 </head>
 <body>
 

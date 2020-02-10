@@ -1,6 +1,7 @@
 package ua.polischuk.model.dao;
 
 
+import ua.polischuk.model.dao.impl.ConnectionPoolHolder;
 import ua.polischuk.model.dao.impl.JDBCDaoFactory;
 
 public abstract class DaoFactory {
@@ -8,13 +9,14 @@ public abstract class DaoFactory {
 
     public abstract UserRepository createUserDao();
     public abstract TestRepository createTestDao();
-    //public abstract TestDao createStudentDao();
+    public abstract UserTestRepository createUserAndTestDao();
+
 
     public static DaoFactory getInstance(){
         if( daoFactory == null ){
             synchronized (DaoFactory.class){
                 if(daoFactory==null){
-                    DaoFactory temp = new JDBCDaoFactory();
+                    DaoFactory temp = new JDBCDaoFactory(ConnectionPoolHolder.poolHolder());
                     daoFactory = temp;
                 }
             }

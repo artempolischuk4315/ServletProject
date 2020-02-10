@@ -1,7 +1,7 @@
 package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.service.TestService;
+import ua.polischuk.service.TestService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +16,9 @@ public class DisableTest implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String testName = request.getParameter("testName");
-        try {
-            testService.enableOrDisableTest(testName, false);
-        } catch (java.lang.Exception e) {
-           log.error("Exception in disabling test");
+
+        if(!testService.enableOrDisableTest(testName, false)) {
+            request.getSession().setAttribute("DisablingError", true);
         }
         return new ShowAllTests(testService).execute(request);
     }

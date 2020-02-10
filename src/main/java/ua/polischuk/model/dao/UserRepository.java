@@ -10,10 +10,7 @@ import java.util.Set;
 
 public interface UserRepository extends GenericDao<User> {
 
-    Optional<User> findByEmail(String email) throws SQLException;
+    Optional<User> findByEmail(String email) ;
     int getNoOfRecords();
-    Set<Test> getAvailableTestsSet(String email) throws SQLException;
-    void addTestToAvailable(String email, String testName) throws SQLException;
-    void completeTest(String currentUserEmail, Integer completedTestsResult, String testName) throws SQLException;
-    ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException;
+
 }

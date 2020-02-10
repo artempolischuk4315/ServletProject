@@ -6,8 +6,13 @@ import java.util.stream.Stream;
 
 public class PasswordEncrypt {
 
-    public String EncryptPassword(String password) throws NoSuchAlgorithmException {
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
+    public static String EncryptPassword(String password)  {
+        MessageDigest md5 = null;
+        try {
+            md5 = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+
+        }
         byte[] bytes = md5.digest(password.getBytes());
         StringBuilder builder = new StringBuilder();
         for(byte b: bytes){

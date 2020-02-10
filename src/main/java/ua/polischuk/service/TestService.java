@@ -1,13 +1,11 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
+import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
-import ua.polischuk.model.dao.UserRepository;
 import ua.polischuk.model.entity.Test;
-
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,42 +18,36 @@ public class TestService {
             this.testRepository = DaoFactory.getInstance().createTestDao();
     }
 
-    public Test findTestByName(String name) throws Exception {
+    public Optional<Test> findTestByName(String name)  {
         log.info(LoggerInfo.FINDING_BY_NAME);
-        Optional<Test> test = testRepository.findByName(name);
-        if(test.isPresent()){
-            log.info(LoggerInfo.OPERATION_SUCCESSFUL);
-            return testRepository.findByName(name).get();
-        }else throw new Exception();
 
-
+        return testRepository.findByName(name);
     }
 
     public List<Test> findAll(int offset, int recPerPage)  {
         log.info(LoggerInfo.FINDING_ALL);
-        List<Test> tests = new ArrayList<>();
-        try{
-             tests = testRepository.findAll(offset, recPerPage);
-    }catch (Exception e){
-            log.error(LoggerInfo.ERROR_GETTING_ALL_TESTS);
-        }
-        log.info(LoggerInfo.OPERATION_SUCCESSFUL);
-        return tests;
+        return testRepository.findAll(offset, recPerPage);
     }
     public int getNoOfRecords() {
         return testRepository.getNoOfRecords();//считается в том же обращении, что и взятие всех юзеров
     }
 
-    public void saveNewTest (Test test) throws Exception{
+    public Optional<Test> saveNewTest (Test test)  {
         log.info(LoggerInfo.SAVING_TEST);
+
         test.setActive(true);
-        testRepository.save(test);
+
+        boolean result = testRepository.save(test);
+
+        return result ?
+                Optional.of(test)
+                : Optional.empty();
     }
 
 
-    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
+    public boolean enableOrDisableTest(String nameOfTest, boolean active)  {
         log.info(LoggerInfo.ENABLE_OR_DISABLE_TEST);
-        testRepository.enableOrDisableTest(nameOfTest, active);
+        return testRepository.enableOrDisableTest(nameOfTest, active);
     }
 
 

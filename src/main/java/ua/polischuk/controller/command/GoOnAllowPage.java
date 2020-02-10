@@ -1,9 +1,8 @@
 package ua.polischuk.controller.command;
 
 import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserService;
-import ua.polischuk.utility.PrinterPreparerWithPagination;
+import ua.polischuk.service.TestService;
+import ua.polischuk.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

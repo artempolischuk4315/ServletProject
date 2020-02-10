@@ -5,29 +5,25 @@ package ua.polischuk.model.dao.impl;
 import ua.polischuk.model.dao.DaoFactory;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.dao.UserTestRepository;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class JDBCDaoFactory extends DaoFactory {
 
-    private DataSource dataSource = ConnectionPoolHolder.getDataSource();
+    private final ConnectionPoolHolder connectionPoolHolder;
+
+    public JDBCDaoFactory(ConnectionPoolHolder connectionPoolHolder) {
+        this.connectionPoolHolder = connectionPoolHolder;
+    }
 
     @Override
-    public TestRepository createTestDao() {
-        return new JDBCTestDao(getConnection());
-    }
+    public TestRepository createTestDao() { return new JDBCTestDao(connectionPoolHolder); }
     @Override
     public UserRepository createUserDao() {
-        return new JDBCUserDao(getConnection());
+        return new JDBCUserDao(connectionPoolHolder);
     }
+    @Override
+    public UserTestRepository createUserAndTestDao(){ return  new JDBCUserTestDao(connectionPoolHolder);}
 
-    private Connection getConnection(){
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

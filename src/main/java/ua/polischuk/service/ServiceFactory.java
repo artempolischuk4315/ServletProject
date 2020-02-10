@@ -1,4 +1,4 @@
-package ua.polischuk.model.service;
+package ua.polischuk.service;
 
 public class ServiceFactory {
 
@@ -24,5 +24,6 @@ public class ServiceFactory {
     public TestService getTestService() {
         return new TestService();
     }
+    public UserInteractionWithTestService getUserTestService(){ return new UserInteractionWithTestService(); }
 
 }

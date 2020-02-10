@@ -1,20 +1,16 @@
 package ua.polischuk.controller.command;
 
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserService;
-import ua.polischuk.utility.PrinterPreparerWithPagination;
-
+import ua.polischuk.service.UserInteractionWithTestService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
 public class WatchAvailableTestsForSelectedUser implements Command {
-    private UserService userService;
-    private TestService testService;
+    private UserInteractionWithTestService userTestService;
 
-    public WatchAvailableTestsForSelectedUser(UserService userService, TestService testService) {
-        this.userService = userService;
-        this.testService = testService;
+
+    public WatchAvailableTestsForSelectedUser(UserInteractionWithTestService userTestService) {
+        this.userTestService = userTestService;
     }
 
     @Override
@@ -22,7 +18,7 @@ public class WatchAvailableTestsForSelectedUser implements Command {
 
         String email = request.getParameter("email");
 
-        Set<Test> availableTests = userService.getAvailableTests(email);
+        Set<Test> availableTests = userTestService.getAvailableTests(email);
         if(availableTests.size()==0){
             request.getSession().setAttribute("noAvailableTests", true);
             return "redirect:/admin/all-users.jsp";

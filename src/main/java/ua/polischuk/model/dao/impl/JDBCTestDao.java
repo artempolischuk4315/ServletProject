@@ -1,8 +1,8 @@
 package ua.polischuk.model.dao.impl;
 
+import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.TestRepository;
 import ua.polischuk.model.dao.mappers.TestMapper;
-import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.dao.SQLQwertys;
 
@@ -11,29 +11,32 @@ import java.util.*;
 
 public class JDBCTestDao implements TestRepository {
 
+    private final ConnectionPoolHolder connectionPoolHolder;
 
     private int noOfRecords;
-    private Connection connection;
 
-    public JDBCTestDao(Connection connection) {
-        this.connection = connection;
+    private static final Logger log = Logger.getLogger( JDBCUserDao.class);
+
+    public JDBCTestDao(final ConnectionPoolHolder connectionPoolHolder) {
+        this.connectionPoolHolder = connectionPoolHolder;
     }
+
     @Override
-    public Optional<Test> findByName(String name) throws SQLException {
+    public Optional<Test> findByName(String name)  {
         TestMapper testMapper = new TestMapper();
 
         String q1 = "select * from test WHERE name = '" + name + "'";
         Test test = null;
-        try {
+        try (Connection connection = connectionPoolHolder.getConnection()){
             Statement stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(q1);
             if (resultSet.next()) {
                 test = testMapper.extractFromResultSet(resultSet);
             }
         }catch (SQLException e){
-            throw new SQLException();
+           // throw new SQLException();
         }
-        return Optional.of(test);
+        return Optional.ofNullable(test);
     }
 
     @Override
@@ -42,14 +45,12 @@ public class JDBCTestDao implements TestRepository {
     }
 
 
-
-
     @Override
-    public void save(Test entity) throws SQLException {
+    public boolean save(Test entity)  {
 
         String sql = SQLQwertys.ADD_NEW_TEST;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
+        try (Connection connection = connectionPoolHolder.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, entity.getName());
             preparedStatement.setString(2, entity.getNameUa());
             preparedStatement.setString(3, String.valueOf(entity.getCategory()));
@@ -57,11 +58,11 @@ public class JDBCTestDao implements TestRepository {
             preparedStatement.setInt(5, entity.getNumberOfQuestions());
             preparedStatement.setInt(6, entity.getTimeLimit());
             preparedStatement.setBoolean(7, entity.isActive());
-            preparedStatement.executeUpdate();
+            int result = preparedStatement.executeUpdate();
 
+            return result ==1;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException();
+            return false;
         }
 
     }
@@ -72,12 +73,13 @@ public class JDBCTestDao implements TestRepository {
     }
 
     @Override
-    public List<Test> findAll(int offset, int recordsPerPage) throws SQLException {
+    public List<Test> findAll(int offset, int recordsPerPage)  {
 
         Map<Integer, Test> tests = new HashMap<>();
         String sql = "SELECT * FROM test "+
                 " limit "+offset+", "+recordsPerPage+"";
 
+        try(Connection connection = connectionPoolHolder.getConnection()){
         try( Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
             ResultSet resultSet = stmt.executeQuery(sql);
@@ -100,7 +102,10 @@ public class JDBCTestDao implements TestRepository {
         }catch (SQLException e){
             connection.rollback();
             e.printStackTrace();
-            throw new SQLException();
+            throw new SQLException(); //TODO
+        }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return new ArrayList<>(tests.values());
     }
@@ -114,7 +119,8 @@ public class JDBCTestDao implements TestRepository {
     public void delete(String testName) throws SQLException {
 
         String sql = "delete from test where name =?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (Connection connection = connectionPoolHolder.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, testName);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -125,24 +131,27 @@ public class JDBCTestDao implements TestRepository {
     }
 
     @Override
-    public void enableOrDisableTest(String nameOfTest, boolean active) throws SQLException {
-        Statement statement = connection.createStatement();
+    public boolean enableOrDisableTest(String nameOfTest, boolean active)  {
+
         String updateTest=
                         "   UPDATE test " +
                         "   SET active =  "+active +
                         "   WHERE name = '"+ nameOfTest+"'";
-        try {
-            // statement.executeQuery(dropTestFromAvailable);
+        try (Connection connection = connectionPoolHolder.getConnection()){
+            Statement statement = connection.createStatement();
             statement.executeUpdate(updateTest);
+            return true;
         }catch (SQLException e){
-            e.printStackTrace();
-            throw new SQLException();
+            return false;
         }
-
     }
 
     @Override
     public void close() {
 
     }
+
+
+
+
 }

@@ -1,13 +1,11 @@
 package ua.polischuk.controller.command;
 
+import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.service.ServiceFactory;
-import ua.polischuk.model.service.TestService;
+import ua.polischuk.service.TestService;
 import ua.polischuk.utility.Validator;
-
 import javax.servlet.http.HttpServletRequest;
-
 import static ua.polischuk.utility.Constants.*;
 
 
@@ -33,17 +31,16 @@ public class CreateTest implements Command {
         Test test = new Test(name, nameUa, category, difficulty, numberOfQuestions, timeLimit);
         Validator validator = new Validator();
         if(!validator.validateTest(name, nameUa, category, difficulty, numberOfQuestions, timeLimit)){
-            return "redirect:/admin/add-test.jsp";
-        }
-
-        try {
-            testService.saveNewTest(test);
-            request.getSession().setAttribute("createdTest", true);
-        } catch (java.lang.Exception e) {
             request.getSession().setAttribute("notCreatedTest", true);
             return "redirect:/admin/add-test.jsp";
         }
 
+        if(testService.saveNewTest(test).isPresent()) {
+            request.getSession().setAttribute("createdTest", true);
+        } else {
+            request.getSession().setAttribute("notCreatedTest", true);
+            return "redirect:/admin/add-test.jsp";
+        }
         return "redirect:/admin/admin-hello.jsp";
     }
 }

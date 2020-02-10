@@ -20,7 +20,10 @@
     <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
     <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 </ul>
-
+ <c:if test = "${sessionScope.noTests==true}">
+    <label class="alert alert-info" ><fmt:message key="alert.noTests"/></label>
+</c:if>
+    <c:remove var="noTests" scope="session"/>
 <div class="container">
     <div class="row" style="margin-top: 5%">
         <div class="col-md-1"></div>

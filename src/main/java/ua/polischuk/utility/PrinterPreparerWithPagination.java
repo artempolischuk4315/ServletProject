@@ -2,11 +2,10 @@ package ua.polischuk.utility;
 
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.TestService;
+import ua.polischuk.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
 import java.util.List;
 
 public class PrinterPreparerWithPagination {
@@ -34,9 +33,6 @@ public class PrinterPreparerWithPagination {
         setSessionParams(request, nOfPages, currentPage, recordsPerPage);
 
     }
-
-
-
 
 
 

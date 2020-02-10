@@ -1,11 +1,9 @@
 package ua.polischuk.controller.command;
 
-import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.ServiceFactory;
-import ua.polischuk.model.service.UserService;
+import ua.polischuk.service.UserService;
 import ua.polischuk.utility.PrinterPreparerWithPagination;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+
 
 
 public class AllUsersMenu implements Command {
@@ -23,8 +21,4 @@ public class AllUsersMenu implements Command {
         preparer.prepareUsersListForPrintingByPages(request, userService);
         return "redirect:/admin/all-users.jsp";
     }
-
-
-
-
 }

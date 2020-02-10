@@ -1,24 +1,27 @@
 package ua.polischuk.controller.command;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.entity.User;
-import ua.polischuk.model.service.TestService;
-import ua.polischuk.model.service.UserService;
-import ua.polischuk.utility.PrinterPreparerWithPagination;
-
+import ua.polischuk.service.TestService;
+import ua.polischuk.service.UserInteractionWithTestService;
+import ua.polischuk.service.UserService;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
+
 
 
 public class AllowTest implements Command {
+
     private UserService userService;
+
     private TestService testService;
+
+    private UserInteractionWithTestService userTestService;
+
     private static final Logger log = Logger.getLogger( AllowTest.class);
 
-    public AllowTest(TestService testService, UserService userService) {
+    public AllowTest(TestService testService, UserService userService, UserInteractionWithTestService userTestService) {
         this.userService = userService;
         this.testService = testService;
+        this.userTestService = userTestService;
     }
 
     @Override
@@ -28,18 +31,14 @@ public class AllowTest implements Command {
         String testName = request.getParameter("testName");
 
 
-        try{
-            userService.findByEmail(email);
-            testService.findTestByName(testName); //can avoid?
-            request.getSession().setAttribute("addedTestToAvailable", true);
-        }catch (java.lang.Exception e){
+        if( !userService.findByEmail(email).isPresent()|| !testService.findTestByName(testName).isPresent()) {
             request.getSession().setAttribute("noSuchTestOrUser", true);
             return "redirect:/admin/allow-test.jsp";
         }
 
-        try {
-            userService.addTestToAvailable(email, testName);
-        } catch (java.lang.Exception e) {
+        if(userTestService.addTestToAvailable(email, testName)) {
+            request.getSession().setAttribute("addedTestToAvailable", true);
+        } else  {
             log.error("Exception in allow test while adding test ");
             request.getSession().setAttribute("unSuccessFullCreated", true);
             return "redirect:/admin/allow-test.jsp";
