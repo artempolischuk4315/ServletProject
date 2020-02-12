@@ -7,13 +7,13 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 
-<ul class="nav navbar-nav navbar-right">
+<ul style="position: relative; margin: auto" class="nav navbar-nav navbar-right ">
 
-    <li><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+    <li style="background-color: #D1C7BF; width: 50px"><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
 
-    <li><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+    <li style="background-color: #D1C7BF; width: 50px" ><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 
-    <li><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
+    <li style="background-color: cadetblue; width: 80px"><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
 
 </ul>
 

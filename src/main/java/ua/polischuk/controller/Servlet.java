@@ -64,13 +64,10 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        System.out.println(path);
         path = path.replaceAll(".*/api/" , "");
-        System.out.println(path);
               Command command = commands.getOrDefault(path ,
                 (r)->"/index.jsp)");
 
-        System.out.println("Current command: "+command.getClass().getName());
         String page = command.execute(request);
         if(page.contains("redirect")){
             response.sendRedirect(page.replace("redirect:", "/api"));

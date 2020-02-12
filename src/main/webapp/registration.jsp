@@ -18,12 +18,9 @@
     </c:if>
     <fmt:setBundle basename="messages"/>
     <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item">
-        <li><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
-        </li>
-        <li class="nav-item">
-        <li><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
-        </li>
+        <li style="background-color: #D1C7BF; width: 50px"><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+
+        <li style="background-color: #D1C7BF; width: 50px" ><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
     </ul>
 </head>
 <body>

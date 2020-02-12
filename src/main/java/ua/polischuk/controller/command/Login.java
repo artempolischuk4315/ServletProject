@@ -27,14 +27,21 @@ public class Login implements Command {
             String email = request.getParameter("email");
             String pass = request.getParameter("pass");
 
-            if (checkIfNotEmpty(email, pass)) return "/login.jsp";
+            if (checkIfNotEmpty(email, pass)) {
+
+                request.getSession().setAttribute("notFullData", true);
+                return "/login.jsp";
+            }
             String encryptedPass = PasswordEncrypt.EncryptPassword(pass);
 
-            if (CommandUtility.checkUserIsLogged(request, email)) return "redirect:/index.jsp";
+            if (CommandUtility.checkUserIsLogged(request, email)) {
+                request.getSession().setAttribute("alreadyLogged", true);
+                return "redirect:/index.jsp";
+            };
 
             Optional<User> userOptional = userService.findByEmail(email);
             if(!userOptional.isPresent()){
-                log.error("Error while logging");
+                request.getSession().setAttribute("invalidEmail", true);
                 return "redirect:/login.jsp";
             }
 
@@ -55,6 +62,7 @@ public class Login implements Command {
                 return "redirect:/user/user-hello.jsp";
 
             } else {
+                request.getSession().setAttribute("invalidPassword", true);
                 return "/login.jsp";//todo  error
         }
     }
@@ -66,12 +74,11 @@ public class Login implements Command {
 
     private void setAttribute (HttpServletRequest req, User user){
         ServletContext context = req.getServletContext();
-
         context.setAttribute("email", user.getEmail());
         req.getSession().setAttribute("user", user);
         req.getSession().setAttribute("role", user.getRole());
         req.getSession().setAttribute("email", user.getEmail());
-        req.getSession().setAttribute("stats", user.getStats());
+        req.getSession().setAttribute("stats",  String.format("%.2f", user.getStats())+"%");
     }
 
     private boolean checkIfNotEmpty(String email, String pass) {

@@ -16,19 +16,22 @@
 <fmt:setBundle basename="messages"/>
 
 
-<ul class="nav navbar-nav navbar-right">
+<ul style="position: relative; margin: auto" class="nav navbar-nav navbar-right ">
 
-    <li><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+    <li style="background-color: #D1C7BF; width: 50px"><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
 
-    <li><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+    <li style="background-color: #D1C7BF; width: 50px" ><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 
-    <li><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
+    <li style="background-color: cadetblue; width: 80px"><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
 
 </ul>
 
 <style>
     body{
         background: url("https://images.pexels.com/photos/590041/pexels-photo-590041.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    }
+    input{
+        background-color: cadetblue;
     }
 </style>
 
@@ -40,37 +43,43 @@
 </head>
 <body>
 <c:if test = "${sessionScope.TestDeleted==true}">
-    <label style="color: crimson" ><fmt:message key="alert.TestDeleted"/></label>
+    <label style="color: crimson; background-color: #D1C7BF; font-size: 25px" ><fmt:message key="alert.TestDeleted"/></label>
 </c:if>
 <c:remove var="TestDeleted" scope="session"/>
 
+<div>
+<label style="color: black; background-color: #D1C7BF; width: 200px">${email} </label>
+</div>
+
 <div  class="col-md-6 col-md-offset-3" >
-<h1 style="color: black"><fmt:message key="label.hello.user" /></h1>
-<h2 style="color: black">${email} </h2>
 <h2 style="color: black"><fmt:message key="label.statsAre" /></h2>
-<h2 style="color: black">${stats} </h2>
+<h1 style="color: black; font-size: 50px;">${stats} </h1>
 </div>
 
 <div  class="col-md-6 col-md-offset-3" >
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
     <input name="category" value="MATH" hidden >
-    <input style="width: 500px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.math" />>
+    <input style="width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.math" />>
 </form>
+    <h1></h1>
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
-    <input name="category" value="PROGRAMMING" hidden >
-    <input style="width: 500px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.progr"/> >
+    <input  name="category" value="PROGRAMMING" hidden >
+    <input style="width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.progr"/> >
 </form>
+    <h1> </h1>
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
     <input name="category" value="HISTORY" hidden >
-    <input style="width: 500px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.history" />>
+    <input style="width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.history" />>
 </form>
+    <h1></h1>
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
     <input name="category" value="PHYSICS" hidden >
-    <input style="width: 500px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.physics" />>
+    <input style="width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.physics" />>
 </form>
 
+    <h1> </h1>
 <form method="post" action="${pageContext.request.contextPath}/watchCompletedTests">
-    <input style="width: 500px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.completedTests" />>
+    <input style="width: 600px; background-color: #D1C7BF" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.completedTests" />>
 </form>
 </div>
 

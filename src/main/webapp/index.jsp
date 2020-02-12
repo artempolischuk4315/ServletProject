@@ -19,8 +19,15 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 
+
+<c:if test = "${sessionScope.alreadyLogged==true}">
+<h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.alreadyLogged"/></h1>
+</c:if>
+<c:remove var="alreadyLogged" scope="session"/>
+
+
 <c:if test = "${sessionScope.logout==true}">
-<label style="color: aliceblue; font-size: 20px"  ><fmt:message key="alert.logout"/></label>
+<label style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.logout"/></label>
 </c:if>
 <c:remove var="logout" scope="session"/>
 <script>
@@ -35,60 +42,41 @@
         location.assign(location.origin + location.pathname + str + location.hash)
     };
 </script>
+<ul class="nav navbar-nav navbar-right">
+    <li style="background-color: #D1C7BF; width: 50px"><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
 
+    <li style="background-color: #D1C7BF; width: 50px" ><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+</ul>
 <head>
 
-    <ul class="nav navbar-nav navbar-right">
-        <li class="nav-item">
-            <a style="color: aliceblue" href="javascript:replace_search('lang', 'en');"><fmt:message key="label.lang.en" /></a>
-        </li>
-        <li class="nav-item">
-            <a style="color: aliceblue" href="javascript:replace_search('lang', 'ua');"><fmt:message key="label.lang.ua" /></a>
-        </li>
-    </ul>
+
 
 <style>
-    body{ background: url("https://images.pexels.com/photos/583846/pexels-photo-583846.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"); background-size: 100% 100%; }
+    body{ background: url("https://images.pexels.com/photos/317356/pexels-photo-317356.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"); background-size: 100% 100%; }
 
-    span{
-        position: absolute;
-        top: 4%;
-        left: 45%;
-        transform: translateX(-50%) translateY(-50%);
-    }
-    label{
-        position: absolute;
-        top: 20%;
-        left: 14%;
-        transform: translateX(-50%) translateY(-50%);
-    }
 </style>
 </head>
 
 <html>
 <body>
 
-        <a style=" color: aliceblue; font-family: 'Franklin Gothic Demi Cond'; font-size: 30px  "
-                class="btn btn-secondary btn-lg " onclick="window.location.href = '${pageContext.request.contextPath}/login.jsp';">
-            <fmt:message key="label.login" /></a>
+<ul class="nav navbar-nav navbar-left">
+<li style="background-color: mediumaquamarine ; width: 140px; font-size: 30px; font-family: 'Palatino Linotype'; position: relative"><a style="color: black" href="${pageContext.request.contextPath}/login.jsp">
+    <fmt:message key="label.login"/></a></li>
 
 
-        <a style="color: aliceblue; font-family: 'Franklin Gothic Demi Cond'; font-size: 30px "
-                class="btn btn-secondary btn-lg "
-                onclick="window.location.href = '${pageContext.request.contextPath}/registration.jsp';">
-            <fmt:message key="label.registration" /></a>
-        <span style="color: aliceblue; font-family: 'Franklin Gothic Demi Cond'; font-size: 60px;"><fmt:message key="label.welcome" /></span>
+<li style="background-color: #D1C7BF; width: 200px; font-size: 30px; font-family: 'Palatino Linotype'; position: relative" ><a style="color: black" href="${pageContext.request.contextPath}/registration.jsp">
+    <fmt:message key="label.registration" /></a></li>
+</ul>
 
-        <h1></h1>
-        <h1></h1>
-        <h1></h1>
-        <h1></h1>
-        <h1></h1>
+        <div  class="col-md-6 col-md-offset-3" >
+        <h1 style="color: black; text-align: center;   font-family: 'Palatino Linotype'; font-size: 65px "><fmt:message key="label.welcome" /></h1>
 
 
+            <h2 style="color: black; text-align: center;  margin-top: 50%;  margin-left: 30%; font-family: 'Palatino Linotype'; position: relative"><fmt:message key="label.middleLabel" /> </h2>
 
 
-
+        </div>
 
 
 </html>

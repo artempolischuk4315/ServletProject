@@ -255,6 +255,7 @@ public class JDBCUserTestDao implements UserTestRepository {
 
                 int count = 0;
                 while (resultSet.next()) {
+
                     completedTests.get(count).setResult(resultSet.getInt(1));
                     count++;
                 }

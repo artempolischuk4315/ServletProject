@@ -19,12 +19,9 @@
 
 
 <ul class="nav navbar-nav navbar-right">
-    <li class="nav-item">
-    <li><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
-    </li>
-    <li class="nav-item">
-    <li><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
-    </li>
+    <li style="background-color: #D1C7BF; width: 50px"><a style="color: black" href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+
+    <li style="background-color: #D1C7BF; width: 50px" ><a style="color: black" href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 </ul>
 
 <style>
@@ -44,11 +41,36 @@
 </style>
 <body>
 <c:if test = "${sessionScope.successRegistr==true}">
-    <label style="color: black; font-size: 20px" ><fmt:message key="alert.successRegistr"/></label>
+    <h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.successRegistr"/></h1>
 </c:if>
-<c:remove var="notValidData" scope="session"/>
+<c:remove var="successRegistr" scope="session"/>
+
+<c:if test = "${sessionScope.notFullData==true}">
+    <h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.enterCorrectData"/></h1>
+</c:if>
+<c:remove var="notFullData" scope="session"/>
 
 
+
+
+<c:if test = "${sessionScope.invalidEmail==true}">
+<h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center;"><fmt:message key="alert.noSuchUser"/></h1>
+</c:if>
+<c:remove var="invalidEmail" scope="session"/>
+
+
+<c:if test = "${sessionScope.invalidPassword==true}">
+    <h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.invalidPassword"/></h1>
+</c:if>
+<c:remove var="invalidPassword" scope="session"/>
+
+
+
+
+<c:if test = "${sessionScope.logout==true}">
+    <h1 style="color: crimson; font-size: 25px; font-family: 'Palatino Linotype'; text-align: center";  ><fmt:message key="alert.logout"/></h1>
+</c:if>
+<c:remove var="logout" scope="session"/>
 
         <div  class="col-md-6 col-md-offset-3" >
         <form method="post" action="${pageContext.request.contextPath}/login"  >
@@ -56,8 +78,9 @@
             <input type="text" class="form-control" name="email" align="center"><br/>
             <label style="font-size: 30px; margin: 0 auto;"><fmt:message key="label.input.password"/></label>
             <input type="password" class="form-control" name="pass"><br/><br/>
-            <button type="submit" class="btn btn-secondary btn-lg " style="display: block; margin: 0 auto;
-            background-color: cadetblue"><fmt:message key="label.submit" /></button>
+            <button type="submit" class="btn btn-secondary btn-lg " style="
+            display: block; margin: 0 auto;
+            background-color: cadetblue; width: 350px"><fmt:message key="label.submit" /></button>
         </form>
         </div>
 

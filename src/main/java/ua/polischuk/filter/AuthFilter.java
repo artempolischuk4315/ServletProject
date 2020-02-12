@@ -1,10 +1,9 @@
 package ua.polischuk.filter;
 
-import ua.polischuk.controller.command.CommandUtility;
+
 import ua.polischuk.controller.command.LogOut;
 import ua.polischuk.model.entity.User;
 import java.io.IOException;
-import java.util.HashSet;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AuthFilter implements Filter {
 
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig)  {}
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
