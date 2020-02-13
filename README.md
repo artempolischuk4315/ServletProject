@@ -14,10 +14,13 @@ Servlet Project
 Requirements
 ******
 
-JDK 1.8
-Apache Tomcat
-Apache Maven
-MySQL
+*JDK 1.8
+
+*Apache Tomcat
+
+*Apache Maven
+
+*MySQL
 
 
 ******
@@ -38,6 +41,7 @@ Use http://localhost:8088/api to view website
 Admin Data
 ********
 
-pasword: pass
-email: art4315@gmail.com
+*pasword: pass
+
+*email: art4315@gmail.com
 
