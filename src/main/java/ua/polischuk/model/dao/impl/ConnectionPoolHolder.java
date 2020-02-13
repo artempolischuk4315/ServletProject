@@ -39,12 +39,11 @@ public class ConnectionPoolHolder {
 
 
     public final Connection getConnection() {
-        //logger.info("connect");
         try {
             return this.dataSource.getConnection();
         } catch (SQLException e) {
             System.out.println("connect catch");
-            //logger.info("connection error", e);
+
             throw new RuntimeException(e);
         }
     }
