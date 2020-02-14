@@ -1,7 +1,5 @@
 package ua.polischuk.filter;
 
-
-import ua.polischuk.controller.command.LogOut;
 import ua.polischuk.model.entity.User;
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -20,8 +18,11 @@ public class AuthFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) req;
+
         HttpServletResponse response = (HttpServletResponse) res;
+
         boolean isAdminInRequest = request.getRequestURI().contains("admin");
 
         if ((request.getRequestURI().contains("user") || isAdminInRequest)
@@ -35,7 +36,8 @@ public class AuthFilter implements Filter {
         if (( request.getRequestURI().contains("index")||isOnIndexPage(request) || request.getRequestURI().contains("login") || request.getRequestURI().contains("registration")) &&
                     request.getSession().getAttribute("role") != null) {
             request.getSession().setAttribute("role", null);
-            new LogOut().execute(request);
+
+            response.sendRedirect(request.getContextPath()+"/logout");
         }
 
             chain.doFilter(request, response);
@@ -44,7 +46,9 @@ public class AuthFilter implements Filter {
 
     private boolean isOnIndexPage(HttpServletRequest request){
         String path = request.getContextPath()+"/";
+
         if(request.getRequestURI().equalsIgnoreCase(path)) return true;
+
         return false;
     }
 

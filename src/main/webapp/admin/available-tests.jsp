@@ -21,6 +21,10 @@
     <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
 </ul>
 
+
+
+
+
 <div class="container">
     <div class="row" style="margin-top: 5%">
         <div class="col-md-1"></div>

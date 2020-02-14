@@ -83,10 +83,17 @@
     <li style="background-color: cadetblue; width: 80px"><a style="color: black" href="${pageContext.request.contextPath}/logout"><fmt:message key="label.logout" /></a></li>
 
 </ul>
- <c:if test = "${sessionScope.noTests==true}">
-    <label style="color: crimson; font-size: 20px" ><fmt:message key="alert.noTests"/></label>
-</c:if>
+
+
+<div  class="col-md-6 col-md-offset-3" >
+<label style="font-size: 30px"><fmt:message key="label.click" /></label>
+    <c:if test = "${sessionScope.noTests==true}">
+        <label style="
+    color: crimson; font-size: 20px; text-align: center; margin-top: 20px" ><fmt:message key="alert.noTests"/></label>
+    </c:if>
     <c:remove var="noTests" scope="session"/>
+</div>
+
 <div class="container">
     <div class="row" style="margin-top: 5%">
         <div class="col-md-1"></div>
