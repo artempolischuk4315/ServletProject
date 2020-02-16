@@ -3,9 +3,9 @@ package ua.polischuk.model.dao.impl;
 
 
 import ua.polischuk.model.dao.DaoFactory;
-import ua.polischuk.model.dao.TestRepository;
-import ua.polischuk.model.dao.UserRepository;
-import ua.polischuk.model.dao.UserTestRepository;
+import ua.polischuk.model.repository.TestRepository;
+import ua.polischuk.model.repository.UserRepository;
+import ua.polischuk.model.repository.UserTestRepository;
 
 
 public class JDBCDaoFactory extends DaoFactory {

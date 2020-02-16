@@ -1,4 +1,4 @@
-package ua.polischuk.model.dao;
+package ua.polischuk.model.repository;
 
 import java.sql.SQLException;
 import java.util.List;

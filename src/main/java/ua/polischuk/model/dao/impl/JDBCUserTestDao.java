@@ -1,21 +1,19 @@
 package ua.polischuk.model.dao.impl;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.dao.UserTestRepository;
-import ua.polischuk.model.dao.mappers.TestMapper;
+import ua.polischuk.model.dao.SQLQwertys;
+import ua.polischuk.model.repository.UserTestRepository;
+import ua.polischuk.model.dao.mapper.TestMapper;
 import ua.polischuk.model.entity.Test;
 
 import java.sql.*;
 import java.util.*;
 
+import static ua.polischuk.model.dao.SQLQwertys.SQL_ADDNIG_TO_AVAILABLE;
 
 
 public class JDBCUserTestDao implements UserTestRepository {
-    public static final String SQL_ADDNIG_TO_AVAILABLE = "INSERT INTO available_tests (user_id, test_id) " +
-            "SELECT u.id, t.id " +
-            "FROM user u, test t " +
-            "WHERE u.email = ? " +
-            "AND t.name = ?";
+
     public static final String ERROR_ADDING_TEST_TO_AVAILABLE = "Error adding test to available";
     public static final String TEST_ALREADY_REMOVED_FROM_AVAILABLE = "Test already removed from available";
     public static final String ERROR_WHILE_COMPLETING_TEST = "Error while completing test";
@@ -102,9 +100,9 @@ public class JDBCUserTestDao implements UserTestRepository {
         if( completedTestsAndResults.keySet().isEmpty()){
             success = 0.0;
         }else{
-            Integer size = completedTestsAndResults.keySet().size();
+            int size = completedTestsAndResults.keySet().size();
             double sumResults = completedTestsAndResults.keySet().stream()
-                    .mapToInt(testId -> completedTestsAndResults.get(testId))
+                    .mapToInt(completedTestsAndResults::get)
                     .sum();
             success = sumResults/size;
         }
@@ -142,7 +140,6 @@ public class JDBCUserTestDao implements UserTestRepository {
         String addTestToCompleted =
                 "INSERT INTO completed_tests (user_id, result, test_id) VALUES ("+userId +", "+ result+", "+ testId+")";
         try {
-            // statement.executeQuery(dropTestFromAvailable);
             statement.executeUpdate(addTestToCompleted);
         }catch (SQLException e){
             log.error(ERROR_ADD_TEST_TO_COMPLETED, e);
@@ -191,17 +188,10 @@ public class JDBCUserTestDao implements UserTestRepository {
     public Set<Test> getAvailableTestsSetByEmail(String email)  {
         Set<Test> tests = new HashSet<>();
         TestMapper testMapper = new TestMapper();
-        String sql =
-                "SELECT test.* "+
-                        " FROM available_tests "+
-                        "INNER JOIN test "+
-                        "ON available_tests.test_id = test.id "+
-                        "INNER JOIN user "+
-                        "ON available_tests.user_id = user.id "+
-                        "WHERE user.email = '" + email + "'";
+        String sql = SQLQwertys.GET_AVAILABLE_TESTS_BY_EMAIL + email + "'";
 
 
-        try(  Connection connection = connectionPoolHolder.getConnection()) {
+        try( Connection connection = connectionPoolHolder.getConnection()) {
 
             Statement stmt = connection.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql);
@@ -221,14 +211,7 @@ public class JDBCUserTestDao implements UserTestRepository {
     public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
         ArrayList<Test> completedTests = new ArrayList<>();
 
-        String sql =
-                "SELECT  test.* "+
-                        " FROM completed_tests "+
-                        "INNER JOIN test "+
-                        "ON completed_tests.test_id = test.id "+
-                        "INNER JOIN user "+
-                        "ON completed_tests.user_id = user.id "+
-                        "WHERE user.email = '" + email + "'";
+        String sql = SQLQwertys.GET_COMPLETED_TESTS_BY_EMAIL+ email + "'";
 
         Map<Integer, Test> tests = new HashMap<>();
 
@@ -246,10 +229,7 @@ public class JDBCUserTestDao implements UserTestRepository {
                 }
                 resultSet.close();
 
-                String getResults =
-                        "SELECT result FROM completed_tests" +
-                                " INNER JOIN user ON completed_tests.user_id =" +
-                                " user.id WHERE user.email = '" + email + "'";
+                String getResults = SQLQwertys.GET_RESULTS + email + "'";
 
                 resultSet = stmt.executeQuery(getResults);
 
@@ -274,11 +254,9 @@ public class JDBCUserTestDao implements UserTestRepository {
 
     @Override
     public void addTestToAvailableByEmailAndNameOfTest(String email, String testName) throws SQLException {
-        String sql =
-                SQL_ADDNIG_TO_AVAILABLE;
 
         try (Connection connection = connectionPoolHolder.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_ADDNIG_TO_AVAILABLE);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, testName);
             preparedStatement.executeUpdate();

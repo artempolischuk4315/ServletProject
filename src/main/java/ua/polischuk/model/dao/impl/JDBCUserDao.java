@@ -1,8 +1,8 @@
 package ua.polischuk.model.dao.impl;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.dao.UserRepository;
-import ua.polischuk.model.dao.mappers.UserMapper;
+import ua.polischuk.model.repository.UserRepository;
+import ua.polischuk.model.dao.mapper.UserMapper;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.model.dao.SQLQwertys;
 

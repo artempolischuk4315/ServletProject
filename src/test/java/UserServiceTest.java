@@ -1,11 +1,10 @@
-import org.assertj.core.api.OffsetDateTimeAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.repository.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.service.UserService;
 

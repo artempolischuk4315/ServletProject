@@ -3,6 +3,9 @@ package ua.polischuk.model.dao;
 
 import ua.polischuk.model.dao.impl.ConnectionPoolHolder;
 import ua.polischuk.model.dao.impl.JDBCDaoFactory;
+import ua.polischuk.model.repository.TestRepository;
+import ua.polischuk.model.repository.UserRepository;
+import ua.polischuk.model.repository.UserTestRepository;
 
 public abstract class DaoFactory {
     private static DaoFactory daoFactory;

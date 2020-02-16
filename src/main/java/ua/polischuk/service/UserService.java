@@ -2,7 +2,7 @@ package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.model.dao.DaoFactory;
-import ua.polischuk.model.dao.UserRepository;
+import ua.polischuk.model.repository.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
 import java.util.*;

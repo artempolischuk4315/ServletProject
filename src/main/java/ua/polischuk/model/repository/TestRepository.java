@@ -1,9 +1,8 @@
-package ua.polischuk.model.dao;
+package ua.polischuk.model.repository;
 
 import ua.polischuk.model.entity.Test;
 
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 public interface TestRepository extends GenericDao<Test> {

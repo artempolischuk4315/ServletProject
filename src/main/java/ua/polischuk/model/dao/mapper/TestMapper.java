@@ -1,4 +1,4 @@
-package ua.polischuk.model.dao.mappers;
+package ua.polischuk.model.dao.mapper;
 
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;

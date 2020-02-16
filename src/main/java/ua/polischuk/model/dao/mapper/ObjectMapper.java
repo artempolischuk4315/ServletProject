@@ -1,4 +1,4 @@
-package ua.polischuk.model.dao.mappers;
+package ua.polischuk.model.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

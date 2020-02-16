@@ -1,11 +1,10 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.dao.DaoFactory;
-import ua.polischuk.model.dao.TestRepository;
+import ua.polischuk.model.repository.TestRepository;
 import ua.polischuk.model.entity.Test;
-import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Optional;
 

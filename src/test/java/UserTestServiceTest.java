@@ -3,14 +3,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.polischuk.model.dao.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.service.UserInteractionWithTestService;
-import ua.polischuk.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

@@ -10,10 +10,17 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+
     <c:if test="${not empty param.lang}">
         <fmt:setLocale value="${param.lang}" scope="session"/>
     </c:if>
     <fmt:setBundle basename="messages"/>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
+        <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
+    </ul>
 </head>
 <body>
 <c:if test = "${sessionScope.notCreatedTest==true}">
@@ -22,10 +29,14 @@
 <c:remove var="notCreatedTest" scope="session"/>
 <form method="post" action="${pageContext.request.contextPath}/createTest">
 
+    <div class="col-md-6 col-md-offset-3" >
     <h3><fmt:message key="label.input.testName" /></h3>
-    <input type="text" name="name" pattern="^[a-zA-Z0-9]+$" required><br/>
+    <input style="
+    width: 600px" type="text" name="name" pattern="^[a-zA-Z0-9]+$" required><br/>
     <h3><fmt:message key="label.input.testNameUa" /></h3>
-    <input type="text" name="nameUa" pattern="[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ'0-9]+$" required><br/>
+    <input style="
+    width: 600px" type="text" name="nameUa" pattern="[а-щА-ЩЬьЮюЯяЇїІіЄєҐґ'0-9]+$" required><br/>
+        <h3><fmt:message key="label.input.category" /></h3>
     <fieldset >
         <input type="radio" id="MATH" name="category" value="MATH">
         <label for="MATH" ><fmt:message key="label.category.math" /></label>
@@ -37,18 +48,19 @@
         <label for="PROGRAMMING" ><fmt:message key="label.category.progr" /></label>
     </fieldset>
     <h3><fmt:message key="label.input.difficulty" /></h3>
-    <input type="number" name="difficulty" pattern="^(?:[1-9]|0[1-9]|10)$" required ><br/>
+    <input style="
+    width: 600px" type="number" name="difficulty" pattern="^(?:[1-9]|0[1-9]|10)$" required ><br/>
     <h3><fmt:message key="label.input.numberOfQuestions" /></h3>
-    <input type="number" name="numberOfQuestions" pattern="[0-9]{1,2}$" required ><br/>
+    <input style="
+    width: 600px" type="number" name="numberOfQuestions" pattern="[0-9]{1,2}$" required ><br/>
     <h3><fmt:message key="label.input.timeLimit" /></h3>
-    <input type="number" name="timeLimit" pattern="[0-9]{1,3}$" required ><br/>
-    <input class="button" type="submit" value=<fmt:message key="label.submit" />>
+    <input style="
+    width: 600px" type="number" name="timeLimit" pattern="[0-9]{1,3}$" required ><br/>
+    <input style="
+    width: 600px" class="btn btn-secondary btn-lg " type="submit" value=<fmt:message key="label.submit" />>
+    </div>
 
 
-    <ul class="nav navbar-nav navbar-right">
-        <li><a href="?lang=en"><fmt:message key="label.lang.en" /></a></li>
-        <li><a href="?lang=ua"><fmt:message key="label.lang.ua" /></a></li>
-    </ul>
 </form>
 </body>
 </html>

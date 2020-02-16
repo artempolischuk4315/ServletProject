@@ -59,7 +59,8 @@
 <div  class="col-md-6 col-md-offset-3" >
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
     <input name="category" value="MATH" hidden >
-    <input style="width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.math" />>
+    <input style="
+    width: 600px" class="btn btn-secondary btn-lg" type="submit" value=<fmt:message key="label.category.math" />>
 </form>
     <h1></h1>
 <form method="post" action="${pageContext.request.contextPath}/showAvailableTests">
