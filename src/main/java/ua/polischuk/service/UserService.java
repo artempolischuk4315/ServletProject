@@ -1,7 +1,7 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.dao.DaoFactory;
+import ua.polischuk.model.repository.DaoFactory;
 import ua.polischuk.model.repository.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
@@ -44,7 +44,7 @@ public class UserService {
     public boolean setUserParamsAndSave(String fName, String fNameUa, String lName,
                                         String lNameUa, String email, String password)  {
 
-        String encryptedPass = PasswordEncrypt.EncryptPassword(password);//changed
+        String encryptedPass = PasswordEncrypt.encryptPassword(password);
 
         User user = new User(fName, fNameUa, lName, lNameUa, email, encryptedPass, User.ROLE.USER);
 
@@ -54,11 +54,7 @@ public class UserService {
 
         setRegistersOfNewUser(user);
 
-        if(saveNewUser(user).isPresent()){
-            return true;
-        }
-
-        return false;
+        return saveNewUser(user).isPresent();
 
     }
 

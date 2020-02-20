@@ -1,13 +1,9 @@
 package ua.polischuk.filter;
 
-import ua.polischuk.model.entity.User;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
 
 @WebFilter
 public class NoCacheFilter implements Filter {

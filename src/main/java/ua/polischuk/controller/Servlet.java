@@ -1,7 +1,6 @@
 package ua.polischuk.controller;
 
 import ua.polischuk.controller.command.*;
-import ua.polischuk.controller.command.Exception;
 import ua.polischuk.service.ServiceFactory;
 import ua.polischuk.service.TestService;
 import ua.polischuk.service.UserInteractionWithTestService;
@@ -34,7 +33,6 @@ public class Servlet extends HttpServlet {
         commands.put("logout", new LogOut());
         commands.put("login", new Login(userService));
         commands.put("registration", new Registration(userService));
-        commands.put("exception" ,  new Exception());
         commands.put("allUsersMenu", new AllUsersMenu(userService));
         commands.put("createTest", new CreateTest(testService));
         commands.put("allTests", new ShowAllTests(testService));

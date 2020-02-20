@@ -1,11 +1,7 @@
 package ua.polischuk.controller.command;
 
 
-import ua.polischuk.model.entity.User;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
 public class CommandUtility {
@@ -14,15 +10,11 @@ public class CommandUtility {
 
         HashSet<String> loggedUsers = (HashSet<String>) request.getServletContext()
                 .getAttribute("loggedUsers");
-        System.out.println("Logged: "+loggedUsers);
-        System.out.println(userName);
+
         if(loggedUsers.stream().anyMatch(userName::equals)){
             return true;
         }
 
-       /* loggedUsers.add(userName);
-        request.getSession().getServletContext()
-                .setAttribute("loggedUsers", loggedUsers);*/
         return false;
     }
 

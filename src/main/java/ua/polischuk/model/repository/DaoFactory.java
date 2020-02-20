@@ -1,11 +1,8 @@
-package ua.polischuk.model.dao;
+package ua.polischuk.model.repository;
 
 
-import ua.polischuk.model.dao.impl.ConnectionPoolHolder;
-import ua.polischuk.model.dao.impl.JDBCDaoFactory;
-import ua.polischuk.model.repository.TestRepository;
-import ua.polischuk.model.repository.UserRepository;
-import ua.polischuk.model.repository.UserTestRepository;
+import ua.polischuk.model.repository.impl.ConnectionPoolHolder;
+import ua.polischuk.model.repository.impl.RepositoryFactory;
 
 public abstract class DaoFactory {
     private static DaoFactory daoFactory;
@@ -19,7 +16,7 @@ public abstract class DaoFactory {
         if( daoFactory == null ){
             synchronized (DaoFactory.class){
                 if(daoFactory==null){
-                    DaoFactory temp = new JDBCDaoFactory(ConnectionPoolHolder.poolHolder());
+                    DaoFactory temp = new RepositoryFactory(ConnectionPoolHolder.poolHolder());
                     daoFactory = temp;
                 }
             }

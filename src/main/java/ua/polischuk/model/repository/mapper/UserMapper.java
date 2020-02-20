@@ -1,4 +1,4 @@
-package ua.polischuk.model.dao.mapper;
+package ua.polischuk.model.repository.mapper;
 
 import ua.polischuk.model.entity.User;
 

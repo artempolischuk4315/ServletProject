@@ -70,15 +70,15 @@
                 </thead>
                 <tbody>
                 <c:set var="counter" value="1"/>
-                <c:forEach items="${users}" var="users">
+                <c:forEach items="${allUsers}" var="allUsers">
                     <tr>
                         <th scope="row"><c:out value="${counter}"/></th>
-                        <td><c:out value="${users.firstName}"/></td>
-                        <td><c:out value="${users.firstNameUa}"/></td>
-                        <td><c:out value="${users.lastName}"/></td>
-                        <td><c:out value="${users.lastNameUa}"/></td>
-                        <td><c:out value="${users.email}"/></td>
-                        <td><c:out value="${users.stats}"/></td>
+                        <td><c:out value="${allUsers.firstName}"/></td>
+                        <td><c:out value="${allUsers.firstNameUa}"/></td>
+                        <td><c:out value="${allUsers.lastName}"/></td>
+                        <td><c:out value="${allUsers.lastNameUa}"/></td>
+                        <td><c:out value="${allUsers.email}"/></td>
+                        <td><c:out value="${allUsers.stats}"/></td>
 
                     </tr>
                     <c:set var="counter" value="${counter+1}"/>
@@ -93,7 +93,7 @@
 <nav aria-label="Navigation ">
     <ul class="pagination">
         <c:if test="${sessionScope.currentPage != 1}">
-            <form class="my-form-menu" action="${pageContext.request.contextPath}/allUsersMenu" method="post">
+            <form class="my-form-menu" action="${pageContext.request.contextPath}/goOnAllowPage" method="post">
 
                 <input type="hidden" name="recordsPerPage" value="${recordsPerPage}">
                 <input type="hidden" name="currentPage" value="${sessionScope.currentPage-1}">

@@ -1,23 +1,22 @@
-package ua.polischuk.model.dao.impl;
+package ua.polischuk.model.repository.impl;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.model.repository.TestRepository;
-import ua.polischuk.model.dao.mapper.TestMapper;
+import ua.polischuk.model.repository.mapper.TestMapper;
 import ua.polischuk.model.entity.Test;
-import ua.polischuk.model.dao.SQLQwertys;
 
 import java.sql.*;
 import java.util.*;
 
-public class JDBCTestDao implements TestRepository {
+public class JDBCTestRepository implements TestRepository {
 
     private final ConnectionPoolHolder connectionPoolHolder;
 
     private int noOfRecords;
 
-    private static final Logger log = Logger.getLogger( JDBCUserDao.class);
+    private static final Logger log = Logger.getLogger( JDBCUserRepository.class);
 
-    public JDBCTestDao(final ConnectionPoolHolder connectionPoolHolder) {
+    public JDBCTestRepository(final ConnectionPoolHolder connectionPoolHolder) {
         this.connectionPoolHolder = connectionPoolHolder;
     }
 

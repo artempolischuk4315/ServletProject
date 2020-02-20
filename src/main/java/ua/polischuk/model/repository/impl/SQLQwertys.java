@@ -1,4 +1,4 @@
-package ua.polischuk.model.dao;
+package ua.polischuk.model.repository.impl;
 
 public interface SQLQwertys {
     String ADD_NEW_USER = "INSERT INTO USER ( firstName, firstNameUa, lastName, lastNameUa, email, password, role )" +

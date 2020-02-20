@@ -7,19 +7,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.OngoingStubbing;
-import ua.polischuk.controller.command.CommandUtility;
-import ua.polischuk.controller.command.Login;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.service.UserService;
-import ua.polischuk.utility.PasswordEncrypt;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;

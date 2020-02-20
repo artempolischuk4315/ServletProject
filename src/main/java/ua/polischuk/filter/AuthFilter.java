@@ -1,15 +1,11 @@
 package ua.polischuk.filter;
 
 import ua.polischuk.model.entity.User;
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public class AuthFilter implements Filter {
@@ -23,18 +19,24 @@ public class AuthFilter implements Filter {
 
         HttpServletResponse response = (HttpServletResponse) res;
 
-        boolean isAdminInRequest = request.getRequestURI().contains("admin");
 
-        if ((request.getRequestURI().contains("user") || isAdminInRequest)
+        if ((request.getRequestURI().contains("user") || request.getRequestURI().contains("admin"))
                 && request.getSession().getAttribute("role") == null) {
+
             response.sendRedirect(request.getContextPath() + "/");
         }
+
         if (request.getRequestURI().contains("admin") && ((request.getSession().getAttribute("role").equals(User.ROLE.USER)))) {
 
             response.sendRedirect(request.getContextPath() + "/user/user-hello.jsp");
         }
-        if (( request.getRequestURI().contains("index")||isOnIndexPage(request) || request.getRequestURI().contains("login") || request.getRequestURI().contains("registration")) &&
+
+        if (( request.getRequestURI().contains("index")||isOnIndexPage(request)
+                || request.getRequestURI().contains("login.jsp") || request.getRequestURI().contains("registration")) &&
                     request.getSession().getAttribute("role") != null) {
+
+
+
             request.getSession().setAttribute("role", null);
 
             response.sendRedirect(request.getContextPath()+"/logout");

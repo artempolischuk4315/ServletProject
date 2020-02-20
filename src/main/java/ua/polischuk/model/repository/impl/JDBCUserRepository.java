@@ -1,15 +1,14 @@
-package ua.polischuk.model.dao.impl;
+package ua.polischuk.model.repository.impl;
 
 import org.apache.log4j.Logger;
 import ua.polischuk.model.repository.UserRepository;
-import ua.polischuk.model.dao.mapper.UserMapper;
+import ua.polischuk.model.repository.mapper.UserMapper;
 import ua.polischuk.model.entity.User;
-import ua.polischuk.model.dao.SQLQwertys;
 
 import java.sql.*;
 import java.util.*;
 
-public class JDBCUserDao implements UserRepository {
+public class JDBCUserRepository implements UserRepository {
     public static final String ERROR_WHILE_SAVING_USER = "Error while saving user";
     public static final String ERROR_FIND_ALL = "Error fond all";
     public static final String ERROR_GETTING_CONNECTION = "Error getting connection";
@@ -19,9 +18,9 @@ public class JDBCUserDao implements UserRepository {
 
     private final ConnectionPoolHolder connectionPoolHolder;
 
-    private static final Logger log = Logger.getLogger( JDBCUserDao.class);
+    private static final Logger log = Logger.getLogger( JDBCUserRepository.class);
 
-    public JDBCUserDao(final ConnectionPoolHolder connectionPoolHolder) {
+    public JDBCUserRepository(final ConnectionPoolHolder connectionPoolHolder) {
         this.connectionPoolHolder = connectionPoolHolder;
     }
 
@@ -65,7 +64,7 @@ public class JDBCUserDao implements UserRepository {
                 " limit "+offset+", "+recordsPerPage+"";
 
         try(Connection connection = connectionPoolHolder.getConnection()){
-        try(Statement stmt = connection.createStatement();) {
+        try(Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
             ResultSet resultSet = stmt.executeQuery(sql);
 

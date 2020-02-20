@@ -17,6 +17,8 @@ public class AllUsersMenu implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+
+        request.getSession().removeAttribute("currentPage");// on this command always from first page
         PrinterPreparerWithPagination preparer = new PrinterPreparerWithPagination();
         preparer.prepareUsersListForPrintingByPages(request, userService);
         return "redirect:/admin/all-users.jsp";

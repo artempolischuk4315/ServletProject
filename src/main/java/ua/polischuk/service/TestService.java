@@ -1,7 +1,7 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.dao.DaoFactory;
+import ua.polischuk.model.repository.DaoFactory;
 import ua.polischuk.model.repository.TestRepository;
 import ua.polischuk.model.entity.Test;
 

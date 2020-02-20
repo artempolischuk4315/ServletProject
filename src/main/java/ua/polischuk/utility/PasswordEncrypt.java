@@ -2,11 +2,10 @@ package ua.polischuk.utility;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.stream.Stream;
 
 public class PasswordEncrypt {
 
-    public static String EncryptPassword(String password)  {
+    public static String encryptPassword(String password)  {
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");

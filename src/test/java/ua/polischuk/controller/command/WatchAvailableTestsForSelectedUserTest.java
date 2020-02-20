@@ -5,12 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.polischuk.controller.command.AllUsersMenu;
-import ua.polischuk.controller.command.WatchAvailableTestsForSelectedUser;
-import ua.polischuk.model.entity.User;
-import ua.polischuk.service.TestService;
 import ua.polischuk.service.UserInteractionWithTestService;
-import ua.polischuk.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)

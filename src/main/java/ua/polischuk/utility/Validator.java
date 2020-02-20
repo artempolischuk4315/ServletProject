@@ -12,20 +12,20 @@ public class Validator {
     private static final String NUMBER_OF_QUESTIONS = "[0-9]{1,2}$";
     private static final String TIME_LIMIT = "[0-9]{1,3}$";
 
-    public static boolean checkEmail(String email) {
+    private static boolean checkEmail(String email) {
         return email.matches(EMAIL);
     }
-    public static boolean checkEnglishWords(String word) {
+    private static boolean checkEnglishWords(String word) {
         return word.matches(ENGLISH_WORDS);
     }
-    public static boolean checkUkrainianWords(String word) {
+    private static boolean checkUkrainianWords(String word) {
         return word.matches(UKRAINIAN_WORDS);
     }
-    public static boolean checkEnglishNameOfTest(String name){return name.matches(NAME_OF_TEST);}
-    public static boolean checkUkrNameOfTest(String name){return name.matches(UKR_NAME_OF_TEST);}
-    public static boolean checkLevelOfDifficulty(int level){return String.valueOf(level).matches(LEVEL_OF_DIFFICULTY);}
-    public static boolean checkNumberOfQuestions(int number){return String.valueOf(number).matches(NUMBER_OF_QUESTIONS);}
-    public static boolean checkTimeLimit(int timeLimit){return String.valueOf(timeLimit).matches(TIME_LIMIT);}
+    private static boolean checkEnglishNameOfTest(String name){return name.matches(NAME_OF_TEST);}
+    private static boolean checkUkrNameOfTest(String name){return name.matches(UKR_NAME_OF_TEST);}
+    private static boolean checkLevelOfDifficulty(int level){return String.valueOf(level).matches(LEVEL_OF_DIFFICULTY);}
+    private static boolean checkNumberOfQuestions(int number){return String.valueOf(number).matches(NUMBER_OF_QUESTIONS);}
+    private static boolean checkTimeLimit(int timeLimit){return String.valueOf(timeLimit).matches(TIME_LIMIT);}
 
     public boolean validateUser(String name, String nameUa, String lastName, String lastNameUa, String email){
         return checkEmail(email) && checkEnglishWords(name) && checkEnglishWords(lastName) &&

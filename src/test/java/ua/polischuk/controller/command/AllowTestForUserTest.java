@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ua.polischuk.controller.command.AllowTest;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.service.TestService;
 import ua.polischuk.service.UserInteractionWithTestService;

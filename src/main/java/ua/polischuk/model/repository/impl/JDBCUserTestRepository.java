@@ -1,18 +1,17 @@
-package ua.polischuk.model.dao.impl;
+package ua.polischuk.model.repository.impl;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.dao.SQLQwertys;
 import ua.polischuk.model.repository.UserTestRepository;
-import ua.polischuk.model.dao.mapper.TestMapper;
+import ua.polischuk.model.repository.mapper.TestMapper;
 import ua.polischuk.model.entity.Test;
 
 import java.sql.*;
 import java.util.*;
 
-import static ua.polischuk.model.dao.SQLQwertys.SQL_ADDNIG_TO_AVAILABLE;
+import static ua.polischuk.model.repository.impl.SQLQwertys.SQL_ADDNIG_TO_AVAILABLE;
 
 
-public class JDBCUserTestDao implements UserTestRepository {
+public class JDBCUserTestRepository implements UserTestRepository {
 
     public static final String ERROR_ADDING_TEST_TO_AVAILABLE = "Error adding test to available";
     public static final String TEST_ALREADY_REMOVED_FROM_AVAILABLE = "Test already removed from available";
@@ -26,9 +25,9 @@ public class JDBCUserTestDao implements UserTestRepository {
 
     private final ConnectionPoolHolder connectionPoolHolder;
 
-    private static final Logger log = Logger.getLogger( JDBCUserDao.class);
+    private static final Logger log = Logger.getLogger( JDBCUserRepository.class);
 
-    public JDBCUserTestDao(final ConnectionPoolHolder connectionPoolHolder) {
+    public JDBCUserTestRepository(final ConnectionPoolHolder connectionPoolHolder) {
         this.connectionPoolHolder = connectionPoolHolder;
     }
 

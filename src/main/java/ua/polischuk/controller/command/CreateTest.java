@@ -1,6 +1,5 @@
 package ua.polischuk.controller.command;
 
-import ua.polischuk.exception.SaveTestException;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.service.TestService;

@@ -5,13 +5,11 @@ import ua.polischuk.model.entity.User;
 import ua.polischuk.service.UserService;
 import ua.polischuk.utility.PasswordEncrypt;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public class Login implements Command {
 
-    private final static String ADMIN_MAIL = "art4315@gmail.com";
 
     private UserService userService;
 
@@ -27,14 +25,17 @@ public class Login implements Command {
             String email = request.getParameter("email");
             String pass = request.getParameter("pass");
 
+            log.info("LOGIN");
+
             if (checkIfNotEmpty(email, pass)) {
 
                 request.getSession().setAttribute("notFullData", true);
                 return "/login.jsp";
             }
-            String encryptedPass = PasswordEncrypt.EncryptPassword(pass);
+            String encryptedPass = PasswordEncrypt.encryptPassword(pass);
 
             if (CommandUtility.checkUserIsLogged(request, email)) {
+                log.info("!!!!");
                 request.getSession().setAttribute("alreadyLogged", true);
                 return "redirect:/index.jsp";
             };
@@ -51,13 +52,13 @@ public class Login implements Command {
 
 
         private String redirectByRoleIfPasswordCorrect(HttpServletRequest request, User user, String email, String encryptedPass) {
-            if (user.getEmail().equals(ADMIN_MAIL) && user.getPassword().equals(encryptedPass)) {
-                setAllParams(request, user, User.ROLE.ADMIN, email);
+            if (user.getRole().toString().equals("ADMIN") && user.getPassword().equals(encryptedPass)) {
+                setAllParams(request, user, email);
 
                 return "redirect:/admin/admin-hello.jsp";
 
             } else if (user.getEmail().equals(email) && user.getPassword().equals(encryptedPass)) {
-                setAllParams(request, user, User.ROLE.USER, email);
+                setAllParams(request, user, email);
 
                 return "redirect:/user/user-hello.jsp";
 
@@ -67,15 +68,23 @@ public class Login implements Command {
         }
     }
 
-    private void setAllParams(HttpServletRequest request, User user, User.ROLE role, String email) {
+    private void setAllParams(HttpServletRequest request, User user, String email) {
+        CommandUtility.deleteUserFromContext(request, (String) request.getSession().getAttribute("email"));
+        //deleting from context user that can be logged now
+        deleteOldAttributes(request);
+
         CommandUtility.addUserToContext(request, email);
-        setAttribute(request, user);
+        setNewAttributes(request, user);
     }
 
-    private void setAttribute (HttpServletRequest req, User user){
-        ServletContext context = req.getServletContext();
-        context.setAttribute("email", user.getEmail());
-        req.getSession().setAttribute("user", user);
+    private void deleteOldAttributes(HttpServletRequest req){
+        req.getSession().removeAttribute("role");
+        req.getSession().removeAttribute("email");
+        req.getSession().removeAttribute("stats");
+    }
+
+    private void setNewAttributes (HttpServletRequest req, User user){
+
         req.getSession().setAttribute("role", user.getRole());
         req.getSession().setAttribute("email", user.getEmail());
         req.getSession().setAttribute("stats",  String.format("%.2f", user.getStats())+"%");

@@ -8,12 +8,16 @@ import ua.polischuk.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+
 public class PrinterPreparerWithPagination {
     private int currentPage;
     private int recordsPerPage = 5;
     private int nOfPages;
 
+
     public void prepareUsersListForPrintingByPages(HttpServletRequest request, UserService userService){
+
+
         setCurrentPage(request);
         List<User> allUsers =userService.getAllUsers((currentPage-1)*recordsPerPage,
                 recordsPerPage);
@@ -57,6 +61,10 @@ public class PrinterPreparerWithPagination {
     }
 
     public void setSessionParams(HttpServletRequest request, int nOfPages, int currentPage, int recordsPerPage){
+
+
+
+
         request.getSession().setAttribute("noOfPages", nOfPages);
         request.getSession().setAttribute("currentPage", currentPage);
         request.getSession().setAttribute("recordsPerPage", recordsPerPage);
