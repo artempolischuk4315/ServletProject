@@ -22,7 +22,6 @@ public class GoOnAllowPage implements Command {
 
 
         PrinterPreparerWithPagination preparer = new PrinterPreparerWithPagination();
-       // preparer.setFirstPage(request);
         preparer.prepareUsersListForPrintingByPages(request, userService);
 
 

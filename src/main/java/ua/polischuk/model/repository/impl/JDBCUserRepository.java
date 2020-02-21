@@ -96,18 +96,15 @@ public class JDBCUserRepository implements UserRepository {
 
     @Override
     public void update(User entity) {
-
+        // for now there is no need of this method in program
     }
 
     @Override
     public void delete(String email) {
-
+        // for now there is no need of this method in program
     }
 
-    @Override
-    public void close() {
 
-    }
 
     @Override
     public Optional<User> findByEmail(String email)  {
@@ -136,4 +133,8 @@ public class JDBCUserRepository implements UserRepository {
         return noOfRecords;
     }
 
+    @Override
+    public void close() {
+
+    }
 }

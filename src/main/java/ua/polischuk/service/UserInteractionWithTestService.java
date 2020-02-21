@@ -43,6 +43,7 @@ public class UserInteractionWithTestService {
 
     public Set<Test> getAvailableTestsByCategory(String email, String category){
         log.info(Category.getCategoryByString(category));
+
         return getAvailableTests(email)
                 .stream()
                 .filter(test -> test.getCategory().toString().equals(category))
@@ -62,7 +63,7 @@ public class UserInteractionWithTestService {
     }
 
 
-    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException { //TODO ?
+    public ArrayList<Test> getCompletedTestsByEmail(String email) throws SQLException {
         log.info(LoggerInfo.GET_COMPLETED_TESTS);
         return userInteractionWithTestRepository.getCompletedTestsByEmail(email);
     }

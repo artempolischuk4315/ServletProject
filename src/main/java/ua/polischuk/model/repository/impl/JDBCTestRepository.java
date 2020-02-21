@@ -33,7 +33,7 @@ public class JDBCTestRepository implements TestRepository {
                 test = testMapper.extractFromResultSet(resultSet);
             }
         }catch (SQLException e){
-           // throw new SQLException();
+           log.error("Exception in saving by name", e);
         }
         return Optional.ofNullable(test);
     }
@@ -111,7 +111,7 @@ public class JDBCTestRepository implements TestRepository {
 
     @Override
     public void update(Test entity) {
-
+        // for now there is no need of this method in program
     }
 
     @Override

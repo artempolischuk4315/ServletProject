@@ -20,17 +20,13 @@ public class ShowAvailableTests implements Command{
        String categoryChosenByUser = request.getParameter("category");
        Set<Test> testsByCategory = userTestService.getAvailableTestsByCategory(currentUserEmail, categoryChosenByUser);
        request.getSession().setAttribute("availableTests", testsByCategory);
+       request.getSession().setAttribute("currentCategory", categoryChosenByUser); // to normal update if test was completed
        if(testsByCategory.size()==0){
            request.getSession().setAttribute("noTests", true);
        }
        return "redirect:/user/available-tests-for-current-user.jsp";
     }
 
-    public void updateListOfTests(HttpServletRequest request) {
-        String currentUserEmail = (String) request.getSession().getAttribute("email");
-        String categoryChosenByUser = request.getParameter("category");
-        Set<Test> testsByCategory = userTestService.getAvailableTestsByCategory(currentUserEmail, categoryChosenByUser);
-        request.getSession().setAttribute("availableTests", testsByCategory);
-    }
+
 
 }

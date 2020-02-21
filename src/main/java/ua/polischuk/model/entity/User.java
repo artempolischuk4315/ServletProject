@@ -1,10 +1,8 @@
 package ua.polischuk.model.entity;
 
 
-import java.io.Serializable;
+public class User  {
 
-
-public class User implements Serializable {
     private int id;
     private String firstName;
     private String firstNameUa;
@@ -14,7 +12,6 @@ public class User implements Serializable {
     private String password;
     private ROLE role;
     private double stats;
-
 
 
     public double getStats() {

@@ -35,7 +35,7 @@ public class Login implements Command {
             String encryptedPass = PasswordEncrypt.encryptPassword(pass);
 
             if (CommandUtility.checkUserIsLogged(request, email)) {
-                log.info("!!!!");
+
                 request.getSession().setAttribute("alreadyLogged", true);
                 return "redirect:/index.jsp";
             };

@@ -16,9 +16,6 @@ public enum Category {
         return enteredCategory;
     }
 
-    public void setEnteredCategory(String enteredCategory) {
-        this.enteredCategory = enteredCategory;
-    }
 
     private static final Map<String, Category> CATEGORY_MAP = new HashMap<>();
 

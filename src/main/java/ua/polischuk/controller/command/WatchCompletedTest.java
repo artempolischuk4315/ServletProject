@@ -1,9 +1,9 @@
 package ua.polischuk.controller.command;
 import ua.polischuk.model.entity.Test;
 import ua.polischuk.service.UserInteractionWithTestService;
+
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class WatchCompletedTest implements Command{
@@ -17,7 +17,7 @@ public class WatchCompletedTest implements Command{
     public String execute(HttpServletRequest request) {
 
         String email = (String) request.getSession().getAttribute("email");
-        List<Test> completedTests = new ArrayList<>();
+        List<Test> completedTests;
 
         try {
            completedTests = userTestService.getCompletedTestsByEmail(email);
