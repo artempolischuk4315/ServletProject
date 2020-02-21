@@ -1,7 +1,7 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.repository.DaoFactory;
+import ua.polischuk.model.repository.RepositoryFactory;
 import ua.polischuk.model.repository.UserTestRepository;
 import ua.polischuk.model.entity.Category;
 import ua.polischuk.model.entity.Test;
@@ -22,7 +22,7 @@ public class UserInteractionWithTestService {
     private static final Logger log = Logger.getLogger( UserInteractionWithTestService.class);
 
     public UserInteractionWithTestService() {
-        this.userInteractionWithTestRepository = DaoFactory.getInstance().createUserAndTestDao();
+        this.userInteractionWithTestRepository = RepositoryFactory.getInstance().createUserAndTestRepos();
     }
 
     public boolean addTestToAvailable(String email, String testName) {

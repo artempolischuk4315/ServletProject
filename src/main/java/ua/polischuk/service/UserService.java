@@ -1,7 +1,7 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.repository.DaoFactory;
+import ua.polischuk.model.repository.RepositoryFactory;
 import ua.polischuk.model.repository.UserRepository;
 import ua.polischuk.model.entity.User;
 import ua.polischuk.utility.PasswordEncrypt;
@@ -21,17 +21,17 @@ public class UserService {
     }
 
     public UserService() {
-            this.userRepository = DaoFactory.getInstance().createUserDao();
+            this.userRepository = RepositoryFactory.getInstance().createUserRepos();
     }
 
 
-    public List<User> getAllUsers(int page, int recPerPage) { //TODO TEST
+    public List<User> getAllUsers(int page, int recPerPage) {
         log.info(LoggerInfo.GETTING_ALL_USERS);
         return userRepository.findAll(page, recPerPage);
     }
 
     public int getNoOfRecords() {
-        return userRepository.getNoOfRecords();//считается в том же обращении, что и взятие всех юзеров
+        return userRepository.getNoOfRecords();
     }
 
     public Optional<User> findByEmail(String email) {

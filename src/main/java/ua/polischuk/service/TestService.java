@@ -1,7 +1,7 @@
 package ua.polischuk.service;
 
 import org.apache.log4j.Logger;
-import ua.polischuk.model.repository.DaoFactory;
+import ua.polischuk.model.repository.RepositoryFactory;
 import ua.polischuk.model.repository.TestRepository;
 import ua.polischuk.model.entity.Test;
 
@@ -14,7 +14,7 @@ public class TestService {
     private static final Logger log = Logger.getLogger( TestService.class);
 
     public TestService() {
-            this.testRepository = DaoFactory.getInstance().createTestDao();
+            this.testRepository = RepositoryFactory.getInstance().createTestRepos();
     }
 
     public Optional<Test> findTestByName(String name)  {
