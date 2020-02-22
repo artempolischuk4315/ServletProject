@@ -80,8 +80,10 @@ public class JDBCTestRepository implements TestRepository {
                 " limit "+offset+", "+recordsPerPage+"";
 
         try(Connection connection = connectionPoolHolder.getConnection()){
-        try( Statement stmt = connection.createStatement()) {
+            Statement stmt = connection.createStatement();
+
             connection.setAutoCommit(false);
+
             ResultSet resultSet = stmt.executeQuery(sql);
 
             TestMapper testMapper = new TestMapper();
@@ -97,14 +99,7 @@ public class JDBCTestRepository implements TestRepository {
             if (resultSet.next())
                 noOfRecords = resultSet.getInt(1);
 
-            connection.commit();
-            connection.setAutoCommit(true);
 
-        }catch (SQLException e){
-            connection.rollback();
-            log.error(e);
-            throw new SQLException();
-        }
         } catch (SQLException e) {
             log.error(e);
         }

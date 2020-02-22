@@ -64,29 +64,26 @@ public class JDBCUserRepository implements UserRepository {
                 " limit "+offset+", "+recordsPerPage+"";
 
         try(Connection connection = connectionPoolHolder.getConnection()){
-        try(Statement stmt = connection.createStatement()) {
+        Statement stmt = connection.createStatement();
             connection.setAutoCommit(false);
             ResultSet resultSet = stmt.executeQuery(sql);
 
             UserMapper userMapper = new UserMapper();
+
             while (resultSet.next()) {
                 User user = userMapper.extractFromResultSet(resultSet);
                 users.add(user);
 
             }
             resultSet.close();
+
             resultSet = stmt.executeQuery("SELECT COUNT(*) from user");
 
             if (resultSet.next())
                 noOfRecords = resultSet.getInt(1);
 
-            connection.commit();
-            connection.setAutoCommit(true);
+            log.info("Number of records: "+noOfRecords);
 
-        }catch (SQLException e){
-            connection.rollback();
-            log.error(ERROR_FIND_ALL, e);
-        }
         }catch (SQLException ex ){
             log.error(ERROR_GETTING_CONNECTION, ex);
         }

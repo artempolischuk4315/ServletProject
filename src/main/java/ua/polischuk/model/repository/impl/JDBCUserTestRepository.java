@@ -212,8 +212,6 @@ public class JDBCUserTestRepository implements UserTestRepository {
 
         String sql = SQLQwertys.GET_COMPLETED_TESTS_BY_EMAIL+ email + "'";
 
-        Map<Integer, Test> tests = new HashMap<>();
-
         TestMapper testMapper = new TestMapper();
 
         try(Connection connection = connectionPoolHolder.getConnection()) {
