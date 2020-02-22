@@ -223,7 +223,6 @@ public class JDBCUserTestRepository implements UserTestRepository {
                 ResultSet resultSet = stmt.executeQuery(sql);
                 while (resultSet.next()) {
                     Test test = testMapper.extractFromResultSet(resultSet);
-                    test = testMapper.makeUnique(tests, test);
                     completedTests.add(test);
                 }
                 resultSet.close();

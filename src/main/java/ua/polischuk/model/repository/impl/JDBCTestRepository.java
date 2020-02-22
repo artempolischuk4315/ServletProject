@@ -74,7 +74,8 @@ public class JDBCTestRepository implements TestRepository {
     @Override
     public List<Test> findAll(int offset, int recordsPerPage)  {
 
-        Map<Integer, Test> tests = new HashMap<>();
+        List<Test> tests = new ArrayList<>();
+
         String sql = "SELECT * FROM test "+
                 " limit "+offset+", "+recordsPerPage+"";
 
@@ -87,7 +88,8 @@ public class JDBCTestRepository implements TestRepository {
 
             while (resultSet.next()) {
                 Test test = testMapper.extractFromResultSet(resultSet);
-                test = testMapper.makeUnique(tests, test);
+                tests.add(test);
+
             }
             resultSet.close();
             resultSet = stmt.executeQuery("SELECT COUNT(*) from test");
@@ -100,13 +102,13 @@ public class JDBCTestRepository implements TestRepository {
 
         }catch (SQLException e){
             connection.rollback();
-            e.printStackTrace();
-            throw new SQLException(); //TODO
+            log.error(e);
+            throw new SQLException();
         }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(e);
         }
-        return new ArrayList<>(tests.values());
+        return tests;
     }
 
     @Override

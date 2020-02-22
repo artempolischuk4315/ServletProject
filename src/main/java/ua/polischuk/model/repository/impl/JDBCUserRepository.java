@@ -58,7 +58,7 @@ public class JDBCUserRepository implements UserRepository {
     @Override
     public List<User> findAll(int offset, int recordsPerPage) {
 
-        Map<Integer, User> users = new HashMap<>();
+        List<User> users = new ArrayList<>();
 
         String sql = "SELECT * FROM user "+
                 " limit "+offset+", "+recordsPerPage+"";
@@ -71,7 +71,8 @@ public class JDBCUserRepository implements UserRepository {
             UserMapper userMapper = new UserMapper();
             while (resultSet.next()) {
                 User user = userMapper.extractFromResultSet(resultSet);
-                user = userMapper.makeUnique(users, user);
+                users.add(user);
+
             }
             resultSet.close();
             resultSet = stmt.executeQuery("SELECT COUNT(*) from user");
@@ -89,7 +90,7 @@ public class JDBCUserRepository implements UserRepository {
         }catch (SQLException ex ){
             log.error(ERROR_GETTING_CONNECTION, ex);
         }
-        return new ArrayList<>(users.values());
+        return users;
     }
 
 

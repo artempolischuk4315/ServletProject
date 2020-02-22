@@ -5,7 +5,6 @@ import ua.polischuk.model.entity.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class TestMapper implements ObjectMapper<Test> {
     @Override
@@ -22,9 +21,5 @@ public class TestMapper implements ObjectMapper<Test> {
         return test;
     }
 
-    @Override
-    public Test makeUnique(Map<Integer, Test> cache, Test test) {
-        cache.putIfAbsent(test.getId(), test);
-        return cache.get(test.getId());
-    }
+
 }
