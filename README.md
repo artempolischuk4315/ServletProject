@@ -23,7 +23,12 @@ Running the project
 
 Clone project to your local repository
 
-*If You have Docker:* 
+*If You use Docker:*
+1) Create image of DB, enter: "docker build -t <image_name> ." - it will create image based on dump.sql file.
+2) Run container based on this image with command: "docker run --name <container_name> -e MYSQL_ROOT_PASSWORD=1 -e MYSQL_DATABASE=myservletdb -p 3308:3306 <image_name>"
+3) Run app.
+
+*If You do not use Docker:*
 
 Run scripts from /resources/db_scripts/ folder to create database and empty tables (create_schema.sql) 
 and to insert data (populate_schema.sql)
