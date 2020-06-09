@@ -23,7 +23,7 @@ Running the project
 
 Clone project to your local repository
 
-_If You have Docker:_ 
+*If You have Docker:* 
 
 Run scripts from /resources/db_scripts/ folder to create database and empty tables (create_schema.sql) 
 and to insert data (populate_schema.sql)
